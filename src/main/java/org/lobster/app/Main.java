@@ -1,8 +1,5 @@
 package org.lobster.app;
-
-import org.lobster.data_access.AviationStackFlightDataAccess;
 import org.lobster.data_access.InMemoryFavoriteFlightsDAO;
-import org.lobster.data_access.OpenSkyFlightDataAccess; // Add this import
 import org.lobster.data_access.MockFlightDataAccess;
 import org.lobster.entity.Flight;
 import org.lobster.interface_adapter.FavoritesViewModel;
@@ -51,31 +48,11 @@ public class Main {
     public FavoritesViewModel favoritesViewModel() {
         return new FavoritesViewModel();
     }
-    public static void testAviationStack() {
-        try {
-            AviationStackFlightDataAccess api = new AviationStackFlightDataAccess();
-
-            // Test with a flight that should definitely exist
-            String[] testFlights = {"AA1004", "UA262", "DL123", "AC101"};
-
-            for (String flightNumber : testFlights) {
-                System.out.println("\n🧪 Testing flight: " + flightNumber);
-                Flight flight = api.findByFlightNumber(flightNumber);
-                System.out.println("✅ Result: " + flight.toString());
-                System.out.println("Has live position: " + flight.hasLivePosition());
-                System.out.println("---");
-            }
-
-        } catch (Exception e) {
-            System.err.println("Test failed: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 
 
     // Rest of your existing main method
     public static void main(String[] args) {
-        testAviationStack();
+
         // Create an instance of Main to access the configuration methods
         Main appConfig = new Main();
 
