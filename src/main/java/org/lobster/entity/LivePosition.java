@@ -4,16 +4,16 @@ public class LivePosition {
     private final double latitude;
     private final double longitude;
     private final int altitude; // in feet
-    private final double speedHorizontal; // in knots
-    private final double direction; // in degrees
+    private final double groundSpeed; // in knots
+    private final double track; // heading, in degrees
 
     public LivePosition(double latitude, double longitude, int altitude,
-                        double speedHorizontal, double direction) {
+                        double gspeed, double track) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.altitude = altitude;
-        this.speedHorizontal = speedHorizontal;
-        this.direction = direction;
+        this.groundSpeed = gspeed;
+        this.track = track;
     }
 
     public boolean isValid() {
@@ -25,6 +25,6 @@ public class LivePosition {
     public double getLatitude() { return latitude; }
     public double getLongitude() { return longitude; }
     public int getAltitude() { return altitude; }
-    public double getSpeedHorizontal() { return speedHorizontal; }
-    public double getDirection() { return direction; }
+    public double getGroundSpeed() { return groundSpeed; }
+    public double getTrack() { return track; }
 }
