@@ -89,12 +89,29 @@ public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
 
         favoritesList.setComponentPopupMenu(contextMenu);
 
-        // Also allow double-click to remove
+        // Work here to try and allow for deselection functionality
         favoritesList.addMouseListener(new MouseAdapter() {
+            private int lastSelectedIndex = -1;
+
             @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    removeSelectedFavorite();
+            public void mouseReleased(MouseEvent e) {
+                int index = favoritesList.locationToIndex(e.getPoint());
+
+                if (index == -1) {
+                    // Clicked on empty space - clear selection
+                    favoritesList.clearSelection();
+                    lastSelectedIndex = -1;
+                } else {
+                    // Check if clicking the same item that was already selected
+                    if (index == lastSelectedIndex) {
+                        // Clicked same item twice - deselect it
+                        favoritesList.clearSelection();
+                        lastSelectedIndex = -1;
+                    } else {
+                        // Clicked different item - select it and remember it
+                        favoritesList.setSelectedIndex(index);
+                        lastSelectedIndex = index;
+                    }
                 }
             }
         });

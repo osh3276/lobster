@@ -26,6 +26,8 @@ import org.lobster.view.MainApplicationFrame;
 import javax.swing.*;
 
 public class Main {
+  
+    boolean debugMode = false;
 
     // Configuration methods - ADD THESE METHODS TO YOUR MAIN CLASS
     public FlightDataAccessInterface flightDataAccess() {
@@ -39,10 +41,11 @@ public class Main {
     public FavoritesViewModel favoritesViewModel() {
         return new FavoritesViewModel();
     }
-    public static void testAPI() {
+  
+    public static void testAPI(String callsign) {
         try {
             FlightRadarDataAccess api = new FlightRadarDataAccess();
-            System.out.println(api.findByCallSign("AFR22J"));
+            System.out.println(api.findByCallSign(callsign));
         } catch (Exception e) {
             System.err.println("Test failed: " + e.getMessage());
             e.printStackTrace();
@@ -52,7 +55,7 @@ public class Main {
 
     // Rest of your existing main method
     public static void main(String[] args) {
-        testAPI();
+        if (debugMode) { testAPI(); }
         // Create an instance of Main to access the configuration methods
         Main appConfig = new Main();
 
