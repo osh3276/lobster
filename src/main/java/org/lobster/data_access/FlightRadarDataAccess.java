@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import org.lobster.entity.*;
 import org.lobster.interface_adapter.FlightDataAccessInterface;
 
+import java.time.Instant;
 import java.util.Date;
 
 public class FlightRadarDataAccess implements FlightDataAccessInterface {
@@ -49,12 +50,12 @@ public class FlightRadarDataAccess implements FlightDataAccessInterface {
         double latitude = flightInfo.getDouble("lat");
         double longitude = flightInfo.getDouble("lon");
         double track = flightInfo.getDouble("track");
-        int altitude = flightInfo.getInt("altitude");
+        int altitude = flightInfo.getInt("alt");
         int groundSpeed = flightInfo.getInt("gspeed");
         String origIata = flightInfo.getString("orig_iata");
         String destIata = flightInfo.getString("dest_iata");
         String operatingAs = flightInfo.getString("operating_as");
-        Date eta = new Date(Long.parseLong(flightInfo.getString("eta")));
+        Date eta = Date.from(Instant.parse(flightInfo.getString("eta")));
 
         Airline airline = mapApiResponseToAirline(service.getAirline(operatingAs));
         Airport departure = mapApiResponseToAirport(service.getAirport(origIata));

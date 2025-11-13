@@ -42,7 +42,7 @@ public class Main {
     public static void testAPI() {
         try {
             FlightRadarDataAccess api = new FlightRadarDataAccess();
-            System.out.println(api.findByFlightNumber("AF22"));
+            System.out.println(api.findByCallSign("AFR22J"));
         } catch (Exception e) {
             System.err.println("Test failed: " + e.getMessage());
             e.printStackTrace();

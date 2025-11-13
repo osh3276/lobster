@@ -45,6 +45,47 @@ public class Flight {
 
     @Override
     public String toString() {
-        return String.format("%s - %s: %s → %s", callsign, airline, departure.getName(), arrival.getName());
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Flight ")
+                .append(flightNumber != null ? flightNumber : "Unknown");
+
+        if (airline != null) {
+            sb.append(" (").append(airline.getName()).append(")");
+        }
+
+        if (callsign != null && !callsign.isEmpty()) {
+            sb.append(" [").append(callsign).append("]");
+        }
+        sb.append('\n');
+
+        sb.append("Route: ")
+                .append(departure != null ? departure.getIata() : "???")
+                .append(" → ")
+                .append(arrival != null ? arrival.getIata() : "???")
+                .append('\n');
+
+        if (eta != null) {
+            sb.append("ETA: ").append(eta).append('\n');
+        }
+
+        if (status != null) {
+            sb.append("Status: ").append(status).append('\n');
+        }
+
+        if (livePosition != null) {
+            sb.append(String.format(
+                    "Position: %.5f°, %.5f° | Alt: %,d ft | Speed: %.0f kt | Heading: %.0f°",
+                    livePosition.getLatitude(),
+                    livePosition.getLongitude(),
+                    livePosition.getAltitude(),
+                    livePosition.getGroundSpeed(),
+                    livePosition.getTrack()
+            ));
+        } else {
+            sb.append("Position: N/A");
+        }
+
+        return sb.toString();
     }
 }
