@@ -1,23 +1,29 @@
 package org.lobster.entity;
 
-import java.util.Objects;
+import java.util.Date;
 
 public class Flight {
+    private final String hex;
     private final String flightNumber;
-    private final String airline;
+    private final String callsign;
+    private final Airline airline;
     private final Airport departure;
     private final Airport arrival;
+    private final Date eta;
     private final FlightStatus status;
-    private final LivePosition livePosition; // Add this field
+    private final LivePosition livePosition;
 
     // Updated constructor
-    public Flight(String flightNumber, String airline, Airport departure, Airport arrival,
+    public Flight(String hex, String flightNumber, String callsign, Airline airline, Airport departure, Airport arrival, Date eta,
                   FlightStatus status, LivePosition livePosition) {
-        this.flightNumber = Objects.requireNonNull(flightNumber);
-        this.airline = Objects.requireNonNull(airline);
-        this.departure = Objects.requireNonNull(departure);
-        this.arrival = Objects.requireNonNull(arrival);
-        this.status = Objects.requireNonNull(status);
+        this.hex = hex;
+        this.airline = airline;
+        this.flightNumber = flightNumber;
+        this.callsign = callsign;
+        this.departure = departure;
+        this.arrival = arrival;
+        this.eta = eta;
+        this.status = status;
         this.livePosition = livePosition;
     }
 
@@ -27,15 +33,18 @@ public class Flight {
     }
 
     // Getters
-    public String getFlightNumber() { return flightNumber; }
-    public String getAirline() { return airline; }
+    public String getCallsign() { return callsign; }
+    public Airline getAirline() { return airline; }
     public Airport getDeparture() { return departure; }
     public Airport getArrival() { return arrival; }
     public FlightStatus getStatus() { return status; }
+    public String getHex() { return hex; }
+    public String getFlightNumber() { return flightNumber; }
+    public Date getEta() { return eta; }
     public LivePosition getLivePosition() { return livePosition; }
 
     @Override
     public String toString() {
-        return String.format("%s - %s: %s → %s", flightNumber, airline, departure.getName(), arrival.getName());
+        return String.format("%s - %s: %s → %s", callsign, airline, departure.getName(), arrival.getName());
     }
 }

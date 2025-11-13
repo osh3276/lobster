@@ -1,9 +1,8 @@
 package org.lobster.app;
 
-import org.lobster.data_access.AviationStackFlightDataAccess;
+import org.lobster.data_access.FlightRadarDataAccess;
+import org.lobster.data_access.FlightRadarService;
 import org.lobster.data_access.InMemoryFavoriteFlightsDAO;
-import org.lobster.data_access.OpenSkyFlightDataAccess; // Add this import
-import org.lobster.data_access.MockFlightDataAccess;
 import org.lobster.entity.Flight;
 import org.lobster.interface_adapter.FavoritesViewModel;
 import org.lobster.interface_adapter.FavoriteFlightsDataAccessInterface;
@@ -53,7 +52,7 @@ public class Main {
     }
     public static void testAviationStack() {
         try {
-            AviationStackFlightDataAccess api = new AviationStackFlightDataAccess();
+            FlightRadarDataAccess api = new FlightRadarDataAccess();
 
             // Test with a flight that should definitely exist
             String[] testFlights = {"AA1004", "UA262", "DL123", "AC101"};

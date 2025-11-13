@@ -105,13 +105,13 @@ public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
         if (selectedFlight != null) {
             int confirm = JOptionPane.showConfirmDialog(
                     this,
-                    "Remove " + selectedFlight.getFlightNumber() + " from favorites?",
+                    "Remove " + selectedFlight.getCallsign() + " from favorites?",
                     "Confirm Removal",
                     JOptionPane.YES_NO_OPTION
             );
 
             if (confirm == JOptionPane.YES_OPTION) {
-                removeFromFavoritesController.execute(selectedFlight.getFlightNumber());
+                removeFromFavoritesController.execute(selectedFlight.getCallsign());
             }
         } else {
             JOptionPane.showMessageDialog(this, "Please select a flight to remove");
@@ -187,8 +187,8 @@ public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
         @Override
         public Component getListCellRendererComponent(JList<? extends Flight> list, Flight flight,
                                                       int index, boolean isSelected, boolean cellHasFocus) {
-            flightNumberLabel.setText(flight.getFlightNumber() + " - " + flight.getAirline());
-            routeLabel.setText(flight.getDeparture().getIataCode() + " → " + flight.getArrival().getIataCode());
+            flightNumberLabel.setText(flight.getCallsign() + " - " + flight.getAirline());
+            routeLabel.setText(flight.getDeparture().getIata() + " → " + flight.getArrival().getIata());
             statusLabel.setText(flight.getStatus().getColorCode() + " " + flight.getStatus().getDisplayName());
 
             if (isSelected) {

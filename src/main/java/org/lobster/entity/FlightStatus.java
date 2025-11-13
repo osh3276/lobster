@@ -1,6 +1,5 @@
 package org.lobster.entity;
 
-
 public enum FlightStatus {
     SCHEDULED("Scheduled", "🟢", "On Time"),
     DELAYED("Delayed", "🟡", "Delayed"),

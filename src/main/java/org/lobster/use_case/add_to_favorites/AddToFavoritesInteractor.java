@@ -33,7 +33,7 @@ public class AddToFavoritesInteractor implements AddToFavoritesInputBoundary {
 
             // 2. Check if flight exists in our system
             Flight flight = flightDataGateway.findByFlightNumber(flightNumber);
-            System.out.println("DEBUG: Flight lookup result: " + (flight != null ? flight.getFlightNumber() : "null"));
+            System.out.println("DEBUG: Flight lookup result: " + (flight != null ? flight.getCallsign() : "null"));
 
             if (flight == null) {
                 System.out.println("DEBUG: Flight not found");
