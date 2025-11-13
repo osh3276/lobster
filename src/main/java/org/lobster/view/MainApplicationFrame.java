@@ -145,7 +145,7 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
                     if (state.lastAddedFlight != null) {
                         // This was an add operation
                         resultArea.setText("Successfully added to favorites!\n\n" +
-                                "Flight: " + state.lastAddedFlight.getFlightNumber() + "\n" +
+                                "Flight: " + state.lastAddedFlight.getCallsign() + "\n" +
                                 "Airline: " + state.lastAddedFlight.getAirline() + "\n" +
                                 "Route: " + state.lastAddedFlight.getDeparture().getName() + " → " +
                                 state.lastAddedFlight.getArrival().getName() + "\n" +

@@ -1,14 +1,11 @@
 package org.lobster.app;
 
-import org.lobster.data_access.AviationStackFlightDataAccess;
+import org.lobster.data_access.FlightRadarDataAccess;
 import org.lobster.data_access.InMemoryFavoriteFlightsDAO;
-import org.lobster.data_access.OpenSkyFlightDataAccess; // Add this import
-import org.lobster.data_access.MockFlightDataAccess;
 import org.lobster.entity.Flight;
 import org.lobster.interface_adapter.FavoritesViewModel;
 import org.lobster.interface_adapter.FavoriteFlightsDataAccessInterface;
 import org.lobster.interface_adapter.FlightDataAccessInterface;
-import org.lobster.interface_adapter.AirportDataAccessInterface; // Add this import
 import org.lobster.interface_adapter.add_to_favorites.AddToFavoritesController;
 import org.lobster.interface_adapter.add_to_favorites.AddToFavoritesPresenter;
 import org.lobster.interface_adapter.get_favorites.GetFavoritesController;
@@ -32,16 +29,7 @@ public class Main {
 
     // Configuration methods - ADD THESE METHODS TO YOUR MAIN CLASS
     public FlightDataAccessInterface flightDataAccess() {
-        // Choose which implementation to use:
-        return new MockFlightDataAccess(); // For testing with mock data
-        // return new OpenSkyFlightDataAccess(); // For real API calls
-        //return new AviationStackFlightDataAccess();
-    }
-
-    public AirportDataAccessInterface airportDataAccess() {
-        // Our OpenSkyFlightDataAccess implements both interfaces
-        return (AirportDataAccessInterface) flightDataAccess();
-        //return new OpenSkyFlightDataAccess();
+        return new FlightRadarDataAccess();
     }
 
     public FavoriteFlightsDataAccessInterface favoriteFlightsDataAccess() {
@@ -51,21 +39,10 @@ public class Main {
     public FavoritesViewModel favoritesViewModel() {
         return new FavoritesViewModel();
     }
-    public static void testAviationStack() {
+    public static void testAPI() {
         try {
-            AviationStackFlightDataAccess api = new AviationStackFlightDataAccess();
-
-            // Test with a flight that should definitely exist
-            String[] testFlights = {"AA1004", "UA262", "DL123", "AC101"};
-
-            for (String flightNumber : testFlights) {
-                System.out.println("\n🧪 Testing flight: " + flightNumber);
-                Flight flight = api.findByFlightNumber(flightNumber);
-                System.out.println("✅ Result: " + flight.toString());
-                System.out.println("Has live position: " + flight.hasLivePosition());
-                System.out.println("---");
-            }
-
+            FlightRadarDataAccess api = new FlightRadarDataAccess();
+            System.out.println(api.findByCallSign("AFR22J"));
         } catch (Exception e) {
             System.err.println("Test failed: " + e.getMessage());
             e.printStackTrace();
@@ -75,14 +52,13 @@ public class Main {
 
     // Rest of your existing main method
     public static void main(String[] args) {
-        testAviationStack();
+        testAPI();
         // Create an instance of Main to access the configuration methods
         Main appConfig = new Main();
 
         // Set up dependencies using the configuration methods
         FavoriteFlightsDataAccessInterface favoritesDAO = appConfig.favoriteFlightsDataAccess();
         FlightDataAccessInterface flightDataAccess = appConfig.flightDataAccess();
-        AirportDataAccessInterface airportDataAccess = appConfig.airportDataAccess();
         FavoritesViewModel favoritesViewModel = appConfig.favoritesViewModel();
 
         // Add to favorites use case

@@ -10,8 +10,8 @@ public class InMemoryFavoriteFlightsDAO implements FavoriteFlightsDataAccessInte
 
     @Override
     public void save(Flight flight) {
-        favorites.put(flight.getFlightNumber(), flight);
-        System.out.println("Saved flight to favorites: " + flight.getFlightNumber());
+        favorites.put(flight.getCallsign(), flight);
+        System.out.println("Saved flight to favorites: " + flight.getCallsign());
     }
 
     @Override
