@@ -22,6 +22,12 @@ public class FlightRadarDataAccess implements FlightDataAccessInterface {
     }
 
     @Override
+    public Flight findByCallSign(String callsign) {
+        JSONObject flightInfo = service.findByCallsign(callsign);
+        return mapApiResponseToFlight(flightInfo);
+    }
+
+    @Override
     public Airport findAirportByIcao(String icao) {
         return mapApiResponseToAirport(service.getAirport(icao));
     }

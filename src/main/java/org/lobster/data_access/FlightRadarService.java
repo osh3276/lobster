@@ -17,9 +17,19 @@ public class FlightRadarService {
         this.API_TOKEN = System.getenv("API_TOKEN");
     }
 
-    public JSONObject findByFlightNumber(String flightNumber) {
+    public JSONObject findByCallsign(String flightNumber) {
         try {
             String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?altitude_ranges=0-40000&callsigns=" + flightNumber;
+            JSONObject flightInfo = makeRequest(url).getJSONArray("data").getJSONObject(0);
+            return flightInfo;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public JSONObject findByFlightNumber(String flightNumber) {
+        try {
+            String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?altitude_ranges=0-40000&flight=" + flightNumber;
             JSONObject flightInfo = makeRequest(url).getJSONArray("data").getJSONObject(0);
             return flightInfo;
         } catch (Exception e) {

@@ -42,18 +42,7 @@ public class Main {
     public static void testAPI() {
         try {
             FlightRadarDataAccess api = new FlightRadarDataAccess();
-
-            // Test with a flight that should definitely exist
-            String[] testFlights = {"AA1004", "UA262", "DL123", "AC101"};
-
-            for (String flightNumber : testFlights) {
-                System.out.println("\n🧪 Testing flight: " + flightNumber);
-                Flight flight = api.findByFlightNumber(flightNumber);
-                System.out.println("✅ Result: " + flight.toString());
-                System.out.println("Has live position: " + flight.hasLivePosition());
-                System.out.println("---");
-            }
-
+            System.out.println(api.findByFlightNumber("AF22"));
         } catch (Exception e) {
             System.err.println("Test failed: " + e.getMessage());
             e.printStackTrace();
