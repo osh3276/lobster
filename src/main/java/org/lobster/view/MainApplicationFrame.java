@@ -4,6 +4,8 @@ import org.lobster.interface_adapter.FavoritesViewModel;
 import org.lobster.interface_adapter.add_to_favorites.AddToFavoritesController;
 import org.lobster.interface_adapter.get_favorites.GetFavoritesController;
 import org.lobster.interface_adapter.remove_from_favorites.RemoveFromFavoritesController;
+import org.lobster.interface_adapter.search_flight.SearchFlightController;
+import org.lobster.interface_adapter.search_flight.SearchFlightViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +17,8 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
     private final GetFavoritesController getFavoritesController;
     private final RemoveFromFavoritesController removeFromFavoritesController;
     private final FavoritesViewModel favoritesViewModel;
+    private final SearchFlightController searchFlightController;
+    private final SearchFlightViewModel searchFlightViewModel;
 
     private JTextField searchField;
     private JButton searchButton;
@@ -27,11 +31,16 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
     public MainApplicationFrame(AddToFavoritesController addToFavoritesController,
                                 GetFavoritesController getFavoritesController,
                                 RemoveFromFavoritesController removeFromFavoritesController,
-                                FavoritesViewModel favoritesViewModel) {
+                                FavoritesViewModel favoritesViewModel,
+                                SearchFlightController searchFlightController,
+                                SearchFlightViewModel searchFlightViewModel) {
         this.addToFavoritesController = addToFavoritesController;
         this.getFavoritesController = getFavoritesController;
         this.removeFromFavoritesController = removeFromFavoritesController;
         this.favoritesViewModel = favoritesViewModel;
+
+        this.searchFlightController = searchFlightController;
+        this.searchFlightViewModel = searchFlightViewModel;
 
         favoritesViewModel.addPropertyChangeListener(this);
         initializeUI();
@@ -112,8 +121,22 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
             return;
         }
         resultArea.setText("Searching for flight " + flightNumber + "...");
-        // TODO: Implement actual flight search
+
+        searchFlightController.onSearch(flightNumber);
+
+        var flight = searchFlightViewModel.getFlight();
+        var message = searchFlightViewModel.getMessage();
+        StringBuilder sb = new StringBuilder();
+        if (flight != null) {
+            sb.append(flight.toString()).append("\n\n");
+        }
+        sb.append(message);
+
+        resultArea.setText(sb.toString());
+        statusLabel.setText(message);
+        statusLabel.setForeground(flight != null ? Color.GREEN: Color.RED);
     }
+
 
     private void addCurrentToFavorites() {
         String flightNumber = searchField.getText().trim();
