@@ -206,7 +206,7 @@ public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
                                                       int index, boolean isSelected, boolean cellHasFocus) {
             flightNumberLabel.setText(flight.getCallsign() + " - " + flight.getAirline());
             routeLabel.setText(flight.getDeparture().getIata() + " → " + flight.getArrival().getIata());
-            statusLabel.setText(flight.getStatus().getColorCode() + " " + flight.getStatus().getDisplayName());
+            // statusLabel.setText(flight.getStatus().getColorCode() + " " + flight.getStatus().getDisplayName());
 
             if (isSelected) {
                 setBackground(list.getSelectionBackground());

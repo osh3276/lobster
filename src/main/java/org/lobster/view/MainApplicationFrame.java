@@ -171,9 +171,9 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
                                 "Flight: " + state.lastAddedFlight.getCallsign() + "\n" +
                                 "Airline: " + state.lastAddedFlight.getAirline() + "\n" +
                                 "Route: " + state.lastAddedFlight.getDeparture().getName() + " → " +
-                                state.lastAddedFlight.getArrival().getName() + "\n" +
-                                "Status: " + state.lastAddedFlight.getStatus().getDisplayName() + " " +
-                                state.lastAddedFlight.getStatus().getColorCode());
+                                state.lastAddedFlight.getArrival().getName() + "\n"); // +
+                                //"Status: " + state.lastAddedFlight.getStatus().getDisplayName() + " " +
+                                // state.lastAddedFlight.getStatus().getColorCode());
                     }
                 } else {
                     statusLabel.setText("✗ " + state.message);
