@@ -61,7 +61,6 @@ public class FlightRadarDataAccess implements FlightDataAccessInterface {
             try {
                 eta = Date.from(Instant.parse(rawEta));
             } catch (Exception e) {
-                // optional: log, but don't crash
                 System.err.println("Failed to parse ETA '" + rawEta + "' for flight " + flightNum);
             }
         }
