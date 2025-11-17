@@ -6,6 +6,8 @@ import org.lobster.interface_adapter.get_favorites.GetFavoritesController;
 import org.lobster.interface_adapter.remove_from_favorites.RemoveFromFavoritesController;
 import org.lobster.interface_adapter.search_flight.SearchFlightController;
 import org.lobster.interface_adapter.search_flight.SearchFlightViewModel;
+import org.lobster.interface_adapter.map_view.MapViewController;
+import org.lobster.interface_adapter.map_view.MapViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +21,8 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
     private final FavoritesViewModel favoritesViewModel;
     private final SearchFlightController searchFlightController;
     private final SearchFlightViewModel searchFlightViewModel;
+    private final MapViewController mapViewController;
+    private final MapViewModel mapViewModel;
 
     private JTextField searchField;
     private JButton searchButton;
@@ -27,13 +31,16 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
     private JTextArea resultArea;
     private JLabel statusLabel;
     private FavoritesSidebar favoritesSidebar;
+    private MapPanel mapPanel;
 
     public MainApplicationFrame(AddToFavoritesController addToFavoritesController,
                                 GetFavoritesController getFavoritesController,
                                 RemoveFromFavoritesController removeFromFavoritesController,
                                 FavoritesViewModel favoritesViewModel,
                                 SearchFlightController searchFlightController,
-                                SearchFlightViewModel searchFlightViewModel) {
+                                SearchFlightViewModel searchFlightViewModel,
+                                MapViewController mapViewController,
+                                MapViewModel mapViewModel) {
         this.addToFavoritesController = addToFavoritesController;
         this.getFavoritesController = getFavoritesController;
         this.removeFromFavoritesController = removeFromFavoritesController;
@@ -41,6 +48,9 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
 
         this.searchFlightController = searchFlightController;
         this.searchFlightViewModel = searchFlightViewModel;
+        
+        this.mapViewController = mapViewController;
+        this.mapViewModel = mapViewModel;
 
         favoritesViewModel.addPropertyChangeListener(this);
         initializeUI();
@@ -65,7 +75,19 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(createSearchPanel(), BorderLayout.NORTH);
-        mainPanel.add(createResultArea(), BorderLayout.CENTER);
+        
+        // Create a split pane for the result area and map
+        JSplitPane mainContentSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        mainContentSplitPane.setDividerLocation(300);
+        mainContentSplitPane.setResizeWeight(0.6);
+        
+        mainContentSplitPane.setTopComponent(createResultArea());
+        
+        // Create the map panel
+        mapPanel = new MapPanel(mapViewController, mapViewModel);
+        mainContentSplitPane.setBottomComponent(mapPanel);
+        
+        mainPanel.add(mainContentSplitPane, BorderLayout.CENTER);
 
         favoritesSidebar = new FavoritesSidebar(
                 getFavoritesController,
@@ -129,6 +151,10 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
         StringBuilder sb = new StringBuilder();
         if (flight != null) {
             sb.append(flight.toString()).append("\n\n");
+            
+            // Update the map with the searched flight
+            java.util.List<String> flightNumbers = java.util.Arrays.asList(flightNumber);
+            mapPanel.updatePlanePositions(flightNumbers);
         }
         sb.append(message);
 
