@@ -29,4 +29,14 @@ public class InMemoryFavoriteFlightsDAO implements FavoriteFlightsDataAccessInte
         favorites.remove(flightNumber);
         System.out.println("Removed flight from favorites: " + flightNumber);
     }
+
+    public void updateFlight(Flight updated) {
+        String key = updated.getCallsign(); // this matches your save() method
+        if (favorites.containsKey(key)) {
+            favorites.put(key, updated);  // replaces the stored flight
+            System.out.println("Updated favorite flight: " + key);
+        } else {
+            System.out.println("Flight not found in favorites, cannot update: " + key);
+        }
+    }
 }
