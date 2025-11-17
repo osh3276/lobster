@@ -89,13 +89,13 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
 
         searchButton.addActionListener(e -> performSearch());
         addFavoriteButton.addActionListener(e -> addCurrentToFavorites());
-        removeFavoriteButton.addActionListener(e -> removeCurrentFromFavorites());
+
 
         searchPanel.add(new JLabel("Flight Number:"));
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
         searchPanel.add(addFavoriteButton);
-        searchPanel.add(removeFavoriteButton);
+
 
         return searchPanel;
     }
@@ -147,14 +147,6 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
         }
     }
 
-    private void removeCurrentFromFavorites() {
-        String flightNumber = searchField.getText().trim();
-        if (!flightNumber.isEmpty()) {
-            removeFromFavoritesController.execute(flightNumber);
-        } else {
-            JOptionPane.showMessageDialog(this, "Please enter a flight number first");
-        }
-    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
