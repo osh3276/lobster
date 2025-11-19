@@ -23,20 +23,21 @@ public class BrowseAirportInteractor implements BrowseAirportInputBoundary {
         if (airport == null || airport.isEmpty()) {
             presenter.present(new BrowseAirportOutputData(null, "Please enter an airport code."));
             return;
-
-            if (!type.equals("arrivals") && !type.equals("departures")) {
-                presenter.present(new BrowseAirportOutputData(null, "Type must be 'arrivals' or 'departures'."));
-                return;
-            }
-
-            List<Flight> flights = flightService.getFlightsByAirport(airport, type);
-
-            if (flights == null || flights.isEmpty()) {
-                presenter.present(new BrowseAirportOutputData(null, "No " + type + " currently available for " + airport + "."));
-                return;
-            }
-
-            presenter.present(new BrowseAirportOutputData(flights, "Showing " + type + " for " + airport + "."));
         }
+
+        if (!type.equals("arrivals") && !type.equals("departures")) {
+            presenter.present(new BrowseAirportOutputData(null, "Type must be 'arrivals' or 'departures'."));
+            return;
+        }
+
+        List<Flight> flights = flightService.getFlightsByAirport(airport, type);
+
+        if (flights == null || flights.isEmpty()) {
+            presenter.present(new BrowseAirportOutputData(null, "No " + type + " currently available for " + airport + "."));
+            return;
+        }
+
+        presenter.present(new BrowseAirportOutputData(flights, "Showing " + type + " for " + airport + "."));
+
     }
 }
