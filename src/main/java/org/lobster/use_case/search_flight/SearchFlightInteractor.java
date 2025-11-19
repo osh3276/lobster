@@ -20,7 +20,17 @@ public class SearchFlightInteractor implements SearchFlightInputBoundary{
             presenter.present(new SearchFlightOutputData(null, "Please enter a flight number"));
             return;
         }
+try {
+    Flight flight = flightDataAccess.findByCallSign(f);
 
-        presenter.present(new SearchFlightOutputData(null, "Search not implemented yet for " +f));
+    if (flight == null) {
+        presenter.present(new SearchFlightOutputData(null, "No flight found for " + f));
+    }
+    else {
+        presenter.present(new SearchFlightOutputData(flight, "Flight found: " +f ));
+    }
+} catch (Exception e) {
+    presenter.present(new SearchFlightOutputData(null, "Error finding flight: " + e.getMessage()));
+}
     }
 }

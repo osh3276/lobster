@@ -94,7 +94,6 @@ public class FlightRadarDataAccess implements FlightDataAccessInterface {
 
     private Airline mapApiResponseToAirline(JSONObject responseJson) {
         if (responseJson == null) return null;
-        
         String name = responseJson.getString("name");
         String iata = responseJson.getString("iata");
         String icao = responseJson.getString("icao");

@@ -2,7 +2,6 @@ package org.lobster.app;
 
 import org.lobster.data_access.FlightRadarDataAccess;
 import org.lobster.data_access.InMemoryFavoriteFlightsDAO;
-import org.lobster.entity.Flight;
 //Interface Adapters
 import org.lobster.interface_adapter.FavoritesViewModel;
 import org.lobster.interface_adapter.FavoriteFlightsDataAccessInterface;
@@ -13,6 +12,8 @@ import org.lobster.interface_adapter.get_favorites.GetFavoritesController;
 import org.lobster.interface_adapter.get_favorites.GetFavoritesPresenter;
 import org.lobster.interface_adapter.remove_from_favorites.RemoveFromFavoritesController;
 import org.lobster.interface_adapter.remove_from_favorites.RemoveFromFavoritesPresenter;
+import org.lobster.interface_adapter.export_flights.ExportFlightsController;
+import org.lobster.interface_adapter.export_flights.ExportFlightsPresenter;
 
 import org.lobster.interface_adapter.search_flight.SearchFlightController;
 import org.lobster.interface_adapter.search_flight.SearchFlightPresenter;
@@ -29,7 +30,9 @@ import org.lobster.use_case.get_favorites.GetFavoritesOutputBoundary;
 import org.lobster.use_case.remove_from_favorites.RemoveFromFavoritesInputBoundary;
 import org.lobster.use_case.remove_from_favorites.RemoveFromFavoritesInteractor;
 import org.lobster.use_case.remove_from_favorites.RemoveFromFavoritesOutputBoundary;
-
+import org.lobster.use_case.export_flights.ExportFlightsInputBoundary;
+import org.lobster.use_case.export_flights.ExportFlightsInteractor;
+import org.lobster.use_case.export_flights.ExportFlightsOutputBoundary;
 
 import org.lobster.use_case.search_flight.SearchFlightInputBoundary;
 import org.lobster.use_case.search_flight.SearchFlightInteractor;
@@ -116,6 +119,11 @@ public class Main {
         UpdateMapOutputBoundary mapViewOutputBoundary = new MapViewPresenter(mapViewModel);
         UpdateMapInputBoundary mapViewInteractor = new UpdateMapInteractor(flightDataAccess, mapViewOutputBoundary);
         MapViewController mapViewController = new MapViewController(mapViewInteractor);
+      
+        // Export flights use case
+        ExportFlightsOutputBoundary exportFlightsOutputBoundary = new ExportFlightsPresenter();
+        ExportFlightsInputBoundary exportFlightsInteractor = new ExportFlightsInteractor(exportFlightsOutputBoundary);
+        ExportFlightsController exportFlightsController = new ExportFlightsController(exportFlightsInteractor);
 
         // Start the application on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
@@ -129,6 +137,7 @@ public class Main {
                     addToFavoritesController,
                     getFavoritesController,
                     removeFromFavoritesController,
+                    exportFlightsController,
                     favoritesViewModel,
                     searchFlightController,
                     searchFlightViewModel,
