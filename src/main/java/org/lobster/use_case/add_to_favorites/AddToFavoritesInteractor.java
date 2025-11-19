@@ -20,6 +20,9 @@ public class AddToFavoritesInteractor implements AddToFavoritesInputBoundary {
 
     @Override
     public void execute(AddToFavoritesInputData inputData) {
+        if (inputData.getFlightNumber() == null){
+            return;
+        }
         String flightIdentifier = inputData.getFlightNumber().trim().toUpperCase();
         System.out.println("DEBUG: AddToFavoritesInteractor executing for: " + flightIdentifier);
 
