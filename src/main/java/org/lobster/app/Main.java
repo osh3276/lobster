@@ -18,6 +18,9 @@ import org.lobster.interface_adapter.export_flights.ExportFlightsPresenter;
 import org.lobster.interface_adapter.search_flight.SearchFlightController;
 import org.lobster.interface_adapter.search_flight.SearchFlightPresenter;
 import org.lobster.interface_adapter.search_flight.SearchFlightViewModel;
+import org.lobster.interface_adapter.map_view.MapViewController;
+import org.lobster.interface_adapter.map_view.MapViewModel;
+import org.lobster.interface_adapter.map_view.MapViewPresenter;
 import org.lobster.use_case.add_to_favorites.AddToFavoritesInputBoundary;
 import org.lobster.use_case.add_to_favorites.AddToFavoritesInteractor;
 import org.lobster.use_case.add_to_favorites.AddToFavoritesOutputBoundary;
@@ -34,6 +37,9 @@ import org.lobster.use_case.export_flights.ExportFlightsOutputBoundary;
 import org.lobster.use_case.search_flight.SearchFlightInputBoundary;
 import org.lobster.use_case.search_flight.SearchFlightInteractor;
 import org.lobster.use_case.search_flight.SearchFlightOutputBoundary;
+import org.lobster.use_case.map_view.UpdateMapInputBoundary;
+import org.lobster.use_case.map_view.UpdateMapInteractor;
+import org.lobster.use_case.map_view.UpdateMapOutputBoundary;
 import org.lobster.view.MainApplicationFrame;
 
 import javax.swing.*;
@@ -56,6 +62,8 @@ public class Main {
     }
 
     public SearchFlightViewModel searchFlightViewModel() { return new SearchFlightViewModel(); }
+
+    public MapViewModel mapViewModel() { return new MapViewModel(); }
   
     public static void testAPI(String callsign) {
         try {
@@ -79,6 +87,7 @@ public class Main {
         FlightDataAccessInterface flightDataAccess = appConfig.flightDataAccess();
         FavoritesViewModel favoritesViewModel = appConfig.favoritesViewModel();
         SearchFlightViewModel searchFlightViewModel = appConfig.searchFlightViewModel();
+        MapViewModel mapViewModel = appConfig.mapViewModel();
 
         // Add to favorites use case
         AddToFavoritesOutputBoundary addToFavoritesOutputBoundary = new AddToFavoritesPresenter(favoritesViewModel);
@@ -106,6 +115,11 @@ public class Main {
         SearchFlightInputBoundary searchFlightInteractor = new SearchFlightInteractor(flightDataAccess, searchFlightOutputBoundary);
         SearchFlightController searchFlightController = new SearchFlightController(searchFlightInteractor);
 
+        // Map view use case
+        UpdateMapOutputBoundary mapViewOutputBoundary = new MapViewPresenter(mapViewModel);
+        UpdateMapInputBoundary mapViewInteractor = new UpdateMapInteractor(flightDataAccess, mapViewOutputBoundary);
+        MapViewController mapViewController = new MapViewController(mapViewInteractor);
+      
         // Export flights use case
         ExportFlightsOutputBoundary exportFlightsOutputBoundary = new ExportFlightsPresenter();
         ExportFlightsInputBoundary exportFlightsInteractor = new ExportFlightsInteractor(exportFlightsOutputBoundary);
@@ -126,7 +140,9 @@ public class Main {
                     exportFlightsController,
                     favoritesViewModel,
                     searchFlightController,
-                    searchFlightViewModel
+                    searchFlightViewModel,
+                    mapViewController,
+                    mapViewModel
             );
             frame.setVisible(true);
         });
