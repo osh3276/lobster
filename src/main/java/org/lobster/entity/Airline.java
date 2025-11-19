@@ -14,4 +14,14 @@ public class Airline {
     public String getIata() { return iata; }
     public String getIcao() { return icao; }
     public String getName() { return name; }
+
+    @Override
+    public String toString() {
+        if (name == null) return "Unknown Airline";
+        if (iata != null && !iata.isEmpty()) {
+            return name + " (" + iata + ")";
+        }
+        return name;
+    }
+
 }
