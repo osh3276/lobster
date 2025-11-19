@@ -196,7 +196,14 @@ public class MapPanel extends JPanel implements PropertyChangeListener {
     }
     
     private void drawPlane(Graphics2D g2d, MapPlane plane) {
+        if (plane == null) {
+            return;
+        }
+        
         MapCoordinate pos = plane.getScreenPosition();
+        if (pos == null) {
+            return;
+        }
         
         // Skip if plane is outside visible area
         if (pos.getX() < 0 || pos.getX() > getWidth() || 
