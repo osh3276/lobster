@@ -36,7 +36,7 @@ public class BrowseAirportInteractor implements BrowseAirportInputBoundary {
                 return;
             }
 
-            presenter.present(new BrowseAirportOutputData(flights, "Showing " + type + " for " + airport));
+            presenter.present(new BrowseAirportOutputData(flights, "Showing " + type + " for " + airport + "."));
         }
     }
 }
