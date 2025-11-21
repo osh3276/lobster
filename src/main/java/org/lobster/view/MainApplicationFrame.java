@@ -44,6 +44,7 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
                                 SearchFlightViewModel searchFlightViewModel,
                                 MapViewController mapViewController,
                                 MapViewModel mapViewModel) {
+
         this.addToFavoritesController = addToFavoritesController;
         this.getFavoritesController = getFavoritesController;
         this.removeFromFavoritesController = removeFromFavoritesController;
@@ -155,7 +156,7 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
         var message = searchFlightViewModel.getMessage();
         StringBuilder sb = new StringBuilder();
         if (flight != null) {
-            sb.append(flight.toString()).append("\n\n");
+            sb.append(flight).append("\n\n");
             
             // Update the map with the searched flight
             java.util.List<String> flightNumbers = java.util.Arrays.asList(flightNumber);
