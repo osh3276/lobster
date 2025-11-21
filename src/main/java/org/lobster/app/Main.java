@@ -2,7 +2,6 @@ package org.lobster.app;
 
 import org.lobster.data_access.FlightRadarDataAccess;
 import org.lobster.data_access.InMemoryFavoriteFlightsDAO;
-import org.lobster.entity.Flight;
 //Interface Adapters
 import org.lobster.interface_adapter.FavoritesViewModel;
 import org.lobster.interface_adapter.FavoriteFlightsDataAccessInterface;
@@ -13,10 +12,15 @@ import org.lobster.interface_adapter.get_favorites.GetFavoritesController;
 import org.lobster.interface_adapter.get_favorites.GetFavoritesPresenter;
 import org.lobster.interface_adapter.remove_from_favorites.RemoveFromFavoritesController;
 import org.lobster.interface_adapter.remove_from_favorites.RemoveFromFavoritesPresenter;
+import org.lobster.interface_adapter.export_flights.ExportFlightsController;
+import org.lobster.interface_adapter.export_flights.ExportFlightsPresenter;
 
 import org.lobster.interface_adapter.search_flight.SearchFlightController;
 import org.lobster.interface_adapter.search_flight.SearchFlightPresenter;
 import org.lobster.interface_adapter.search_flight.SearchFlightViewModel;
+import org.lobster.interface_adapter.map_view.MapViewController;
+import org.lobster.interface_adapter.map_view.MapViewModel;
+import org.lobster.interface_adapter.map_view.MapViewPresenter;
 import org.lobster.use_case.add_to_favorites.AddToFavoritesInputBoundary;
 import org.lobster.use_case.add_to_favorites.AddToFavoritesInteractor;
 import org.lobster.use_case.add_to_favorites.AddToFavoritesOutputBoundary;
@@ -26,11 +30,16 @@ import org.lobster.use_case.get_favorites.GetFavoritesOutputBoundary;
 import org.lobster.use_case.remove_from_favorites.RemoveFromFavoritesInputBoundary;
 import org.lobster.use_case.remove_from_favorites.RemoveFromFavoritesInteractor;
 import org.lobster.use_case.remove_from_favorites.RemoveFromFavoritesOutputBoundary;
-
+import org.lobster.use_case.export_flights.ExportFlightsInputBoundary;
+import org.lobster.use_case.export_flights.ExportFlightsInteractor;
+import org.lobster.use_case.export_flights.ExportFlightsOutputBoundary;
 
 import org.lobster.use_case.search_flight.SearchFlightInputBoundary;
 import org.lobster.use_case.search_flight.SearchFlightInteractor;
 import org.lobster.use_case.search_flight.SearchFlightOutputBoundary;
+import org.lobster.use_case.map_view.UpdateMapInputBoundary;
+import org.lobster.use_case.map_view.UpdateMapInteractor;
+import org.lobster.use_case.map_view.UpdateMapOutputBoundary;
 import org.lobster.view.MainApplicationFrame;
 
 import javax.swing.*;
@@ -53,6 +62,8 @@ public class Main {
     }
 
     public SearchFlightViewModel searchFlightViewModel() { return new SearchFlightViewModel(); }
+
+    public MapViewModel mapViewModel() { return new MapViewModel(); }
   
     public static void testAPI(String callsign) {
         try {
@@ -76,6 +87,7 @@ public class Main {
         FlightDataAccessInterface flightDataAccess = appConfig.flightDataAccess();
         FavoritesViewModel favoritesViewModel = appConfig.favoritesViewModel();
         SearchFlightViewModel searchFlightViewModel = appConfig.searchFlightViewModel();
+        MapViewModel mapViewModel = appConfig.mapViewModel();
 
         // Add to favorites use case
         AddToFavoritesOutputBoundary addToFavoritesOutputBoundary = new AddToFavoritesPresenter(favoritesViewModel);
@@ -103,6 +115,16 @@ public class Main {
         SearchFlightInputBoundary searchFlightInteractor = new SearchFlightInteractor(flightDataAccess, searchFlightOutputBoundary);
         SearchFlightController searchFlightController = new SearchFlightController(searchFlightInteractor);
 
+        // Map view use case
+        UpdateMapOutputBoundary mapViewOutputBoundary = new MapViewPresenter(mapViewModel);
+        UpdateMapInputBoundary mapViewInteractor = new UpdateMapInteractor(flightDataAccess, mapViewOutputBoundary);
+        MapViewController mapViewController = new MapViewController(mapViewInteractor);
+      
+        // Export flights use case
+        ExportFlightsOutputBoundary exportFlightsOutputBoundary = new ExportFlightsPresenter();
+        ExportFlightsInputBoundary exportFlightsInteractor = new ExportFlightsInteractor(exportFlightsOutputBoundary);
+        ExportFlightsController exportFlightsController = new ExportFlightsController(exportFlightsInteractor);
+
         // Start the application on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
             try {
@@ -115,9 +137,12 @@ public class Main {
                     addToFavoritesController,
                     getFavoritesController,
                     removeFromFavoritesController,
+                    exportFlightsController,
                     favoritesViewModel,
                     searchFlightController,
-                    searchFlightViewModel
+                    searchFlightViewModel,
+                    mapViewController,
+                    mapViewModel
             );
             frame.setVisible(true);
         });

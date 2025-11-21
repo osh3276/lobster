@@ -6,6 +6,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import org.lobster.entity.Flight;
 
 public class FlightRadarService {
 
@@ -29,7 +32,7 @@ public class FlightRadarService {
 
     public JSONObject findByFlightNumber(String flightNumber) {
         try {
-            String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?altitude_ranges=0-40000&flight=" + flightNumber;
+            String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?altitude_ranges=0-40000&flights=" + flightNumber;
             JSONObject flightInfo = makeRequest(url).getJSONArray("data").getJSONObject(0);
             return flightInfo;
         } catch (Exception e) {
@@ -78,5 +81,9 @@ public class FlightRadarService {
         Response response = httpClient.newCall(request).execute();
         String responseBody = response.body().string();
         return new JSONObject(responseBody);
+    }
+
+    public List<Flight> getFlightsByAirport(String airportCode, String type) {
+        return new ArrayList<>();
     }
 }

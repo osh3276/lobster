@@ -4,8 +4,11 @@ import org.lobster.interface_adapter.FavoritesViewModel;
 import org.lobster.interface_adapter.add_to_favorites.AddToFavoritesController;
 import org.lobster.interface_adapter.get_favorites.GetFavoritesController;
 import org.lobster.interface_adapter.remove_from_favorites.RemoveFromFavoritesController;
+import org.lobster.interface_adapter.export_flights.ExportFlightsController;
 import org.lobster.interface_adapter.search_flight.SearchFlightController;
 import org.lobster.interface_adapter.search_flight.SearchFlightViewModel;
+import org.lobster.interface_adapter.map_view.MapViewController;
+import org.lobster.interface_adapter.map_view.MapViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,9 +19,12 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
     private final AddToFavoritesController addToFavoritesController;
     private final GetFavoritesController getFavoritesController;
     private final RemoveFromFavoritesController removeFromFavoritesController;
+    private final ExportFlightsController exportFlightsController;
     private final FavoritesViewModel favoritesViewModel;
     private final SearchFlightController searchFlightController;
     private final SearchFlightViewModel searchFlightViewModel;
+    private final MapViewController mapViewController;
+    private final MapViewModel mapViewModel;
 
     private JTextField searchField;
     private JButton searchButton;
@@ -27,20 +33,29 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
     private JTextArea resultArea;
     private JLabel statusLabel;
     private FavoritesSidebar favoritesSidebar;
+    private MapPanel mapPanel;
 
     public MainApplicationFrame(AddToFavoritesController addToFavoritesController,
                                 GetFavoritesController getFavoritesController,
                                 RemoveFromFavoritesController removeFromFavoritesController,
+                                ExportFlightsController exportFlightsController,
                                 FavoritesViewModel favoritesViewModel,
                                 SearchFlightController searchFlightController,
-                                SearchFlightViewModel searchFlightViewModel) {
+                                SearchFlightViewModel searchFlightViewModel,
+                                MapViewController mapViewController,
+                                MapViewModel mapViewModel) {
+
         this.addToFavoritesController = addToFavoritesController;
         this.getFavoritesController = getFavoritesController;
         this.removeFromFavoritesController = removeFromFavoritesController;
+        this.exportFlightsController = exportFlightsController;
         this.favoritesViewModel = favoritesViewModel;
 
         this.searchFlightController = searchFlightController;
         this.searchFlightViewModel = searchFlightViewModel;
+        
+        this.mapViewController = mapViewController;
+        this.mapViewModel = mapViewModel;
 
         favoritesViewModel.addPropertyChangeListener(this);
         initializeUI();
@@ -65,11 +80,24 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(createSearchPanel(), BorderLayout.NORTH);
-        mainPanel.add(createResultArea(), BorderLayout.CENTER);
+        
+        // Create a split pane for the result area and map
+        JSplitPane mainContentSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        mainContentSplitPane.setDividerLocation(300);
+        mainContentSplitPane.setResizeWeight(0.6);
+        
+        mainContentSplitPane.setTopComponent(createResultArea());
+        
+        // Create the map panel
+        mapPanel = new MapPanel(mapViewController, mapViewModel);
+        mainContentSplitPane.setBottomComponent(mapPanel);
+        
+        mainPanel.add(mainContentSplitPane, BorderLayout.CENTER);
 
         favoritesSidebar = new FavoritesSidebar(
                 getFavoritesController,
                 removeFromFavoritesController,
+                exportFlightsController,
                 favoritesViewModel
         );
 
@@ -89,13 +117,13 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
 
         searchButton.addActionListener(e -> performSearch());
         addFavoriteButton.addActionListener(e -> addCurrentToFavorites());
-        removeFavoriteButton.addActionListener(e -> removeCurrentFromFavorites());
+
 
         searchPanel.add(new JLabel("Flight Number:"));
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
         searchPanel.add(addFavoriteButton);
-        searchPanel.add(removeFavoriteButton);
+
 
         return searchPanel;
     }
@@ -128,7 +156,11 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
         var message = searchFlightViewModel.getMessage();
         StringBuilder sb = new StringBuilder();
         if (flight != null) {
-            sb.append(flight.toString()).append("\n\n");
+            sb.append(flight).append("\n\n");
+            
+            // Update the map with the searched flight
+            java.util.List<String> flightNumbers = java.util.Arrays.asList(flightNumber);
+            mapPanel.updatePlanePositions(flightNumbers);
         }
         sb.append(message);
 
@@ -147,14 +179,6 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
         }
     }
 
-    private void removeCurrentFromFavorites() {
-        String flightNumber = searchField.getText().trim();
-        if (!flightNumber.isEmpty()) {
-            removeFromFavoritesController.execute(flightNumber);
-        } else {
-            JOptionPane.showMessageDialog(this, "Please enter a flight number first");
-        }
-    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -171,9 +195,9 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
                                 "Flight: " + state.lastAddedFlight.getCallsign() + "\n" +
                                 "Airline: " + state.lastAddedFlight.getAirline() + "\n" +
                                 "Route: " + state.lastAddedFlight.getDeparture().getName() + " → " +
-                                state.lastAddedFlight.getArrival().getName() + "\n" +
-                                "Status: " + state.lastAddedFlight.getStatus().getDisplayName() + " " +
-                                state.lastAddedFlight.getStatus().getColorCode());
+                                state.lastAddedFlight.getArrival().getName() + "\n"); // +
+                                //"Status: " + state.lastAddedFlight.getStatus().getDisplayName() + " " +
+                                // state.lastAddedFlight.getStatus().getColorCode());
                     }
                 } else {
                     statusLabel.setText("✗ " + state.message);

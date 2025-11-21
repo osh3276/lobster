@@ -13,5 +13,6 @@ public class Airport {
 
     // Getters
     public String getIata() { return iata; }
+    public String getIcao() { return icao; }
     public String getName() { return name; }
 }

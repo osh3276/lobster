@@ -2,6 +2,7 @@ package org.lobster.view;
 
 import org.lobster.entity.Flight;
 import org.lobster.interface_adapter.FavoritesViewModel;
+import org.lobster.interface_adapter.export_flights.ExportFlightsController;
 import org.lobster.interface_adapter.get_favorites.GetFavoritesController;
 import org.lobster.interface_adapter.remove_from_favorites.RemoveFromFavoritesController;
 
@@ -13,22 +14,28 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
     private final GetFavoritesController getFavoritesController;
     private final RemoveFromFavoritesController removeFromFavoritesController;
+    private final ExportFlightsController exportFlightsController;
     private final FavoritesViewModel favoritesViewModel;
     private final JList<Flight> favoritesList;
     private final DefaultListModel<Flight> listModel;
     private final JLabel countLabel;
+    private final List<JCheckBox> checkBoxes;
 
     public FavoritesSidebar(GetFavoritesController getFavoritesController,
                             RemoveFromFavoritesController removeFromFavoritesController,
+                            ExportFlightsController exportFlightsController,
                             FavoritesViewModel favoritesViewModel) {
         this.getFavoritesController = getFavoritesController;
         this.removeFromFavoritesController = removeFromFavoritesController;
+        this.exportFlightsController = exportFlightsController;
         this.favoritesViewModel = favoritesViewModel;
+        this.checkBoxes = new ArrayList<>();
 
         favoritesViewModel.addPropertyChangeListener(this);
 
@@ -46,11 +53,31 @@ public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
         countLabel.setBorder(new EmptyBorder(0, 0, 10, 0));
         add(countLabel, BorderLayout.NORTH);
 
-        // Favorites list
+        // Favorites list with checkboxes
         listModel = new DefaultListModel<>();
         favoritesList = new JList<>(listModel);
-        favoritesList.setCellRenderer(new FlightListRenderer());
+        favoritesList.setCellRenderer(new FlightListRendererWithCheckbox());
         favoritesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // Handle checkbox clicks
+        favoritesList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int index = favoritesList.locationToIndex(e.getPoint());
+                if (index >= 0 && index < checkBoxes.size()) {
+                    Rectangle cellBounds = favoritesList.getCellBounds(index, index);
+                    if (cellBounds != null && cellBounds.contains(e.getPoint())) {
+                        int checkboxX = cellBounds.x + 5;
+                        int checkboxWidth = 20;
+                        if (e.getX() >= checkboxX && e.getX() <= checkboxX + checkboxWidth) {
+                            JCheckBox checkbox = checkBoxes.get(index);
+                            checkbox.setSelected(!checkbox.isSelected());
+                            favoritesList.repaint();
+                        }
+                    }
+                }
+            }
+        });
 
         // Add right-click context menu for removal
         setupContextMenu();
@@ -67,7 +94,7 @@ public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
     }
 
     private JPanel createControlPanel() {
-        JPanel controlPanel = new JPanel(new FlowLayout());
+        JPanel controlPanel = new JPanel(new GridLayout(2, 2, 5, 5));
 
         JButton refreshButton = new JButton("Refresh");
         refreshButton.addActionListener(e -> refreshFavorites());
@@ -75,8 +102,16 @@ public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
         JButton removeButton = new JButton("Remove Selected");
         removeButton.addActionListener(e -> removeSelectedFavorite());
 
+        JButton exportSelectedButton = new JButton("Export Selected Flights");
+        exportSelectedButton.addActionListener(e -> exportSelectedFlights());
+
+        JButton exportAllButton = new JButton("Export All Favorites");
+        exportAllButton.addActionListener(e -> exportAllFavorites());
+
         controlPanel.add(refreshButton);
         controlPanel.add(removeButton);
+        controlPanel.add(exportSelectedButton);
+        controlPanel.add(exportAllButton);
 
         return controlPanel;
     }
@@ -141,10 +176,70 @@ public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
 
     private void updateFavoritesList(List<Flight> favorites) {
         listModel.clear();
+        checkBoxes.clear();
         for (Flight flight : favorites) {
             listModel.addElement(flight);
+            checkBoxes.add(new JCheckBox());
         }
         updateCountLabel(favorites.size());
+    }
+
+    private void exportSelectedFlights() {
+        List<Flight> selectedFlights = getSelectedFlights();
+        if (selectedFlights.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please select at least one flight to export",
+                    "No Flights Selected", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String[] formats = {"CSV"};
+        String selectedFormat = (String) JOptionPane.showInputDialog(
+                this,
+                "Select export format:",
+                "Export Format",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                formats,
+                formats[0]
+        );
+
+        if (selectedFormat != null) {
+            exportFlightsController.execute(selectedFlights, selectedFormat, false);
+        }
+    }
+
+    private void exportAllFavorites() {
+        List<Flight> allFavorites = favoritesViewModel.getState().allFavorites;
+        if (allFavorites.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No favorites to export",
+                    "No Favorites", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String[] formats = {"CSV"};
+        String selectedFormat = (String) JOptionPane.showInputDialog(
+                this,
+                "Select export format:",
+                "Export Format",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                formats,
+                formats[0]
+        );
+
+        if (selectedFormat != null) {
+            exportFlightsController.execute(allFavorites, selectedFormat, true);
+        }
+    }
+
+    private List<Flight> getSelectedFlights() {
+        List<Flight> selected = new ArrayList<>();
+        for (int i = 0; i < checkBoxes.size() && i < listModel.size(); i++) {
+            if (checkBoxes.get(i).isSelected()) {
+                selected.add(listModel.getElementAt(i));
+            }
+        }
+        return selected;
     }
 
     private void updateCountLabel(int count) {
@@ -174,15 +269,19 @@ public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
         }
     }
 
-    // Custom renderer for flight items in the list
-    private static class FlightListRenderer extends JPanel implements ListCellRenderer<Flight> {
+    // Custom renderer for flight items in the list with checkbox
+    private class FlightListRendererWithCheckbox extends JPanel implements ListCellRenderer<Flight> {
+        private final JCheckBox checkBox;
         private final JLabel flightNumberLabel;
         private final JLabel routeLabel;
         private final JLabel statusLabel;
 
-        public FlightListRenderer() {
+        public FlightListRendererWithCheckbox() {
             setLayout(new BorderLayout());
             setBorder(new EmptyBorder(5, 5, 5, 5));
+
+            checkBox = new JCheckBox();
+            checkBox.setEnabled(false);
 
             flightNumberLabel = new JLabel();
             flightNumberLabel.setFont(flightNumberLabel.getFont().deriveFont(Font.BOLD));
@@ -197,6 +296,7 @@ public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
             infoPanel.add(flightNumberLabel, BorderLayout.NORTH);
             infoPanel.add(routeLabel, BorderLayout.CENTER);
 
+            add(checkBox, BorderLayout.WEST);
             add(infoPanel, BorderLayout.CENTER);
             add(statusLabel, BorderLayout.EAST);
         }
@@ -204,9 +304,19 @@ public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
         @Override
         public Component getListCellRendererComponent(JList<? extends Flight> list, Flight flight,
                                                       int index, boolean isSelected, boolean cellHasFocus) {
+            if (index >= 0 && index < checkBoxes.size()) {
+                checkBox.setSelected(checkBoxes.get(index).isSelected());
+            } else {
+                checkBox.setSelected(false);
+            }
+
             flightNumberLabel.setText(flight.getCallsign() + " - " + flight.getAirline());
             routeLabel.setText(flight.getDeparture().getIata() + " → " + flight.getArrival().getIata());
-            statusLabel.setText(flight.getStatus().getColorCode() + " " + flight.getStatus().getDisplayName());
+            if (flight.getStatus() != null) {
+                statusLabel.setText(flight.getStatus().getColorCode() + " " + flight.getStatus().getDisplayName());
+            } else {
+                statusLabel.setText("N/A");
+            }
 
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
