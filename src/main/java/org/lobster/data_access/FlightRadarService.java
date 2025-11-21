@@ -29,7 +29,7 @@ public class FlightRadarService {
 
     public JSONObject findByFlightNumber(String flightNumber) {
         try {
-            String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?altitude_ranges=0-40000&flight=" + flightNumber;
+            String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?altitude_ranges=0-40000&flights=" + flightNumber;
             JSONObject flightInfo = makeRequest(url).getJSONArray("data").getJSONObject(0);
             return flightInfo;
         } catch (Exception e) {

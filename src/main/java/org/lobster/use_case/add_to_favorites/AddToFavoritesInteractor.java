@@ -33,8 +33,8 @@ public class AddToFavoritesInteractor implements AddToFavoritesInputBoundary {
                 return;
             }
 
-            // 2. Check if flight exists using findByCallSign (like search does)
-            Flight flight = flightDataGateway.findByCallSign(flightIdentifier);
+            // 2. Check if flight exists using findByFlightNumber
+            Flight flight = flightDataGateway.findByFlightNumber(flightIdentifier);
             System.out.println("DEBUG: Looking for: '" + flightIdentifier + "'");
             System.out.println("DEBUG: Found flight: " + (flight != null ?
                     "Number: '" + flight.getFlightNumber() + "', Callsign: '" + flight.getCallsign() + "'" : "null"));
