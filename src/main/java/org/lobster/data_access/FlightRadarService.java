@@ -10,19 +10,18 @@ import java.io.IOException;
 public class FlightRadarService {
 
     private final OkHttpClient httpClient;
-    private final String API_TOKEN;
+    private static final String API_TOKEN = System.getenv("API_TOKEN");
 
     public FlightRadarService() {
         this.httpClient = new OkHttpClient();
-        this.API_TOKEN = System.getenv("API_TOKEN");
     }
 
     public JSONObject findByCallsign(String flightNumber) {
         try {
             String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?altitude_ranges=0-40000&callsigns=" + flightNumber;
-            JSONObject flightInfo = makeRequest(url).getJSONArray("data").getJSONObject(0);
-            return flightInfo;
+            return makeRequest(url).getJSONArray("data").getJSONObject(0);
         } catch (Exception e) {
+            System.err.println("Failed to find flight by callsign: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -30,19 +29,20 @@ public class FlightRadarService {
     public JSONObject findByFlightNumber(String flightNumber) {
         try {
             String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?altitude_ranges=0-40000&flight=" + flightNumber;
-            JSONObject flightInfo = makeRequest(url).getJSONArray("data").getJSONObject(0);
-            return flightInfo;
+            return makeRequest(url).getJSONArray("data").getJSONObject(0);
         } catch (Exception e) {
+            System.err.println("Failed to find flight by flight number: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     // will only return the last 100 flights due to api limitations
-    public JSONObject returnAllFlights() {
+    public JSONObject returnAllFlights(String airlineCode) {
         try {
-            String url = "/api/static/airlines/afl/light";
+            String url = "/api/static/airlines/"+ airlineCode.toLowerCase() + "/light";
             return makeRequest(url);
         } catch (Exception e) {
+            System.err.println("Failed to get all flights: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -76,6 +76,7 @@ public class FlightRadarService {
                 .build();
 
         Response response = httpClient.newCall(request).execute();
+        assert response.body() != null;
         String responseBody = response.body().string();
         return new JSONObject(responseBody);
     }
