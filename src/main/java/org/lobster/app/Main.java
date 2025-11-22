@@ -40,12 +40,14 @@ import org.lobster.use_case.search_flight.SearchFlightOutputBoundary;
 import org.lobster.use_case.map_view.UpdateMapInputBoundary;
 import org.lobster.use_case.map_view.UpdateMapInteractor;
 import org.lobster.use_case.map_view.UpdateMapOutputBoundary;
+import org.lobster.util.Logger;
 import org.lobster.view.MainApplicationFrame;
 
 import javax.swing.*;
 
 public class Main {
   
+    private static final String CLASS_NAME = "Main";
     private static boolean debugMode = false;
 
     // Configuration methods - ADD THESE METHODS TO YOUR MAIN CLASS
@@ -68,9 +70,9 @@ public class Main {
     public static void testAPI(String callsign) {
         try {
             FlightRadarDataAccess api = new FlightRadarDataAccess();
-            System.out.println(api.findByCallSign(callsign));
+            Logger.getInstance().info(CLASS_NAME, "API Test Result: " + api.findByCallSign(callsign));
         } catch (Exception e) {
-            System.err.println("Test failed: " + e.getMessage());
+            Logger.getInstance().error(CLASS_NAME, "API Test failed", e);
             e.printStackTrace();
         }
     }
@@ -130,7 +132,7 @@ public class Main {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception e) {
-                e.printStackTrace();
+                Logger.getInstance().error(CLASS_NAME, "Failed to set look and feel", e);
             }
 
             MainApplicationFrame frame = new MainApplicationFrame(

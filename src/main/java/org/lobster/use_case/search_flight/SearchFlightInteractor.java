@@ -2,6 +2,8 @@ package org.lobster.use_case.search_flight;
 
 import org.lobster.interface_adapter.FlightDataAccessInterface;
 import org.lobster.entity.Flight;
+import org.lobster.util.Logger;
+import org.lobster.exception.FlightDataException;
 
 public class SearchFlightInteractor implements SearchFlightInputBoundary {
     private final FlightDataAccessInterface flightDataAccess;

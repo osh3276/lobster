@@ -1,10 +1,10 @@
 package org.lobster.view;
 
-import org.lobster.entity.MapBounds;
 import org.lobster.entity.MapCoordinate;
 import org.lobster.entity.MapPlane;
 import org.lobster.interface_adapter.map_view.MapViewController;
 import org.lobster.interface_adapter.map_view.MapViewModel;
+import org.lobster.util.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,10 +21,11 @@ import javax.imageio.ImageIO;
  * Custom JPanel that renders a map with aircraft positions
  */
 public class MapPanel extends JPanel implements PropertyChangeListener {
-    
-    private final MapViewController controller;
-    private final MapViewModel viewModel;
-    private BufferedImage worldMapImage;
+
+    private static final String CLASS_NAME = "MapPanel";
+    private final transient MapViewController controller;
+    private final transient MapViewModel viewModel;
+    private transient BufferedImage worldMapImage;
     
     private static final int DEFAULT_WIDTH = 800;
     private static final int DEFAULT_HEIGHT = 400;
@@ -60,12 +61,12 @@ public class MapPanel extends JPanel implements PropertyChangeListener {
             InputStream imageStream = getClass().getResourceAsStream("/mercatorworldmap.jpg");
             if (imageStream != null) {
                 worldMapImage = ImageIO.read(imageStream);
-                System.out.println("World map image loaded successfully");
+                Logger.getInstance().info(CLASS_NAME, "World map image loaded successfully");
             } else {
-                System.err.println("Could not find mercatorworldmap.jpg in resources");
+                Logger.getInstance().warn(CLASS_NAME, "Could not find mercatorworldmap.jpg in resources");
             }
         } catch (IOException e) {
-            System.err.println("Failed to load world map image: " + e.getMessage());
+            Logger.getInstance().error(CLASS_NAME, "Failed to load world map image", e);
             worldMapImage = null;
         }
     }
@@ -133,17 +134,8 @@ public class MapPanel extends JPanel implements PropertyChangeListener {
         
         // Draw latitude lines (horizontal) using Mercator projection
         for (int lat = -80; lat <= 80; lat += 20) {
-            double latRad = Math.toRadians(lat);
-            double mercatorY = Math.log(Math.tan(Math.PI/4 + latRad/2));
-            
-            // Convert to screen coordinates using the same projection as MapBounds
-            double minLatRad = Math.toRadians(-85);
-            double maxLatRad = Math.toRadians(85);
-            double minMercatorY = Math.log(Math.tan(Math.PI/4 + minLatRad/2));
-            double maxMercatorY = Math.log(Math.tan(Math.PI/4 + maxLatRad/2));
-            
-            double y = height - ((mercatorY - minMercatorY) / (maxMercatorY - minMercatorY) * height);
-            
+            double y = getY(lat, height);
+
             g2d.drawLine(0, (int)y, width, (int)y);
             
             // Label major latitude lines
@@ -186,7 +178,20 @@ public class MapPanel extends JPanel implements PropertyChangeListener {
         g2d.drawString("85°S, 180°W", 5, height - 5);
         g2d.drawString("85°S, 180°E", width - 80, height - 5);
     }
-    
+
+    private static double getY(int lat, int height) {
+        double latRad = Math.toRadians(lat);
+        double mercatorY = Math.log(Math.tan(Math.PI/4 + latRad/2));
+
+        // Convert to screen coordinates using the same projection as MapBounds
+        double minLatRad = Math.toRadians(-85);
+        double maxLatRad = Math.toRadians(85);
+        double minMercatorY = Math.log(Math.tan(Math.PI/4 + minLatRad/2));
+        double maxMercatorY = Math.log(Math.tan(Math.PI/4 + maxLatRad/2));
+
+        return height - ((mercatorY - minMercatorY) / (maxMercatorY - minMercatorY) * height);
+    }
+
     private void drawPlanes(Graphics2D g2d) {
         List<MapPlane> planes = viewModel.getPlanes();
         
@@ -234,14 +239,14 @@ public class MapPanel extends JPanel implements PropertyChangeListener {
         // Restore transform
         g2d.setTransform(oldTransform);
         
-        // Draw flight number label
+        // Draw the flight number label
         g2d.setColor(PLANE_LABEL_COLOR);
         g2d.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
         FontMetrics fm = g2d.getFontMetrics();
         String label = plane.getFlightNumber();
         int labelWidth = fm.stringWidth(label);
         
-        // Position label below and to the right of the plane
+        // The position label below and to the right of the plane
         int labelX = pos.getX() + 12;
         int labelY = pos.getY() + 5;
         
@@ -287,7 +292,7 @@ public class MapPanel extends JPanel implements PropertyChangeListener {
     @Override
     public void removeNotify() {
         super.removeNotify();
-        // Clean up listener when component is removed
+        // Clean up listener when a component is removed
         viewModel.removePropertyChangeListener(this);
     }
 }
