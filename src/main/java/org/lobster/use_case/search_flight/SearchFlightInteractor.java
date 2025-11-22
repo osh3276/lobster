@@ -5,7 +5,7 @@ import org.lobster.entity.Flight;
 import org.lobster.util.Logger;
 import org.lobster.exception.FlightDataException;
 
-public class SearchFlightInteractor implements SearchFlightInputBoundary{
+public class SearchFlightInteractor implements SearchFlightInputBoundary {
     private final FlightDataAccessInterface flightDataAccess;
     private final SearchFlightOutputBoundary presenter;
 
@@ -18,21 +18,19 @@ public class SearchFlightInteractor implements SearchFlightInputBoundary{
     public void execute(SearchFlightInputData inputData) {
         String f = inputData.getFlightNumber().trim().toUpperCase();
 
-        if (f.isEmpty()){
+        if (f.isEmpty()) {
             presenter.present(new SearchFlightOutputData(null, "Please enter a flight number"));
             return;
         }
-try {
-    Flight flight = flightDataAccess.findByCallSign(f);
-
-    if (flight == null) {
-        presenter.present(new SearchFlightOutputData(null, "No flight found for " + f));
-    }
-    else {
-        presenter.present(new SearchFlightOutputData(flight, "Flight found: " +f ));
-    }
-} catch (Exception e) {
-    presenter.present(new SearchFlightOutputData(null, "Error finding flight: " + e.getMessage()));
-}
+        try {
+            Flight flight = flightDataAccess.findByFlightNumber(f);
+            if (flight == null) {
+                presenter.present(new SearchFlightOutputData(null, "No flight found for " + f));
+            } else {
+                presenter.present(new SearchFlightOutputData(flight, "Flight found: " + f));
+            }
+        } catch (Exception e) {
+            presenter.present(new SearchFlightOutputData(null, "Error finding flight: " + e.getMessage()));
+        }
     }
 }

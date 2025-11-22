@@ -7,6 +7,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import org.lobster.entity.Flight;
 
 public class FlightRadarService {
 
@@ -81,5 +84,9 @@ public class FlightRadarService {
         assert response.body() != null;
         String responseBody = response.body().string();
         return new JSONObject(responseBody);
+    }
+
+    public List<Flight> getFlightsByAirport(String airportCode, String type) {
+        return new ArrayList<>();
     }
 }

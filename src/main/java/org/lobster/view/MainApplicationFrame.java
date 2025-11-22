@@ -42,6 +42,7 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
                                 SearchFlightViewModel searchFlightViewModel,
                                 MapViewController mapViewController,
                                 MapViewModel mapViewModel) {
+
         this.addToFavoritesController = addToFavoritesController;
         this.getFavoritesController = getFavoritesController;
         this.removeFromFavoritesController = removeFromFavoritesController;
