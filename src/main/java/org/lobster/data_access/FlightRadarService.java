@@ -1,6 +1,7 @@
 package org.lobster.data_access;
 
 import org.json.JSONObject;
+import org.lobster.util.Logger;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -9,6 +10,7 @@ import java.io.IOException;
 
 public class FlightRadarService {
 
+    private static final String CLASS_NAME = "FlightRadar24";
     private final OkHttpClient httpClient;
     private static final String API_TOKEN = System.getenv("API_TOKEN");
 
@@ -16,13 +18,13 @@ public class FlightRadarService {
         this.httpClient = new OkHttpClient();
     }
 
-    public JSONObject findByCallsign(String flightNumber) {
+    public JSONObject findByCallsign(String callsign) {
         try {
-            String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?altitude_ranges=0-40000&callsigns=" + flightNumber;
+            String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?altitude_ranges=0-40000&callsigns=" + callsign;
             return makeRequest(url).getJSONArray("data").getJSONObject(0);
         } catch (Exception e) {
-            System.err.println("Failed to find flight by callsign: " + e.getMessage());
-            throw new RuntimeException(e);
+            Logger.getInstance().error(CLASS_NAME, "Failed to find flight by callsign: " + callsign, e);
+            return null;
         }
     }
 
@@ -31,8 +33,8 @@ public class FlightRadarService {
             String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?altitude_ranges=0-40000&flight=" + flightNumber;
             return makeRequest(url).getJSONArray("data").getJSONObject(0);
         } catch (Exception e) {
-            System.err.println("Failed to find flight by flight number: " + e.getMessage());
-            throw new RuntimeException(e);
+            Logger.getInstance().error(CLASS_NAME, "Failed to find flight by flight number: " + flightNumber, e);
+            return null;
         }
     }
 
@@ -42,8 +44,8 @@ public class FlightRadarService {
             String url = "/api/static/airlines/"+ airlineCode.toLowerCase() + "/light";
             return makeRequest(url);
         } catch (Exception e) {
-            System.err.println("Failed to get all flights: " + e.getMessage());
-            throw new RuntimeException(e);
+            Logger.getInstance().error(CLASS_NAME, "Failed to get all flights", e);
+            return null;
         }
     }
 
@@ -52,7 +54,7 @@ public class FlightRadarService {
             String url = "https://fr24api.flightradar24.com/api/static/airlines/"+ airlineCode.toUpperCase() +"/light/";
             return makeRequest(url);
         } catch (Exception e) {
-            System.err.println("Failed to get airline: " + e.getMessage());
+            Logger.getInstance().warn(CLASS_NAME, "Failed to get airline: " + airlineCode, e);
         }
         return null;
     }
@@ -62,7 +64,7 @@ public class FlightRadarService {
             String url = "https://fr24api.flightradar24.com/api/static/airports/"+ airportCode.toUpperCase() +"/light/";
             return makeRequest(url);
         } catch (Exception e) {
-            System.err.println("Failed to get airport: " + e.getMessage());
+            Logger.getInstance().warn(CLASS_NAME, "Failed to get airport: " + airportCode, e);
         }
         return null;
     }

@@ -2,16 +2,19 @@ package org.lobster.data_access;
 
 import org.lobster.entity.Flight;
 import org.lobster.interface_adapter.FavoriteFlightsDataAccessInterface;
+import org.lobster.util.Logger;
 
 import java.util.*;
 
 public class InMemoryFavoriteFlightsDAO implements FavoriteFlightsDataAccessInterface {
+    
+    private static final String CLASS_NAME = "InMemoryFavoriteFlightsDAO";
     private final Map<String, Flight> favorites = new HashMap<>();
 
     @Override
     public void save(Flight flight) {
         favorites.put(flight.getCallsign(), flight);
-        System.out.println("Saved flight to favorites: " + flight.getCallsign());
+        Logger.getInstance().info(CLASS_NAME, "Saved flight to favorites: " + flight.getCallsign());
     }
 
     @Override
@@ -26,7 +29,10 @@ public class InMemoryFavoriteFlightsDAO implements FavoriteFlightsDataAccessInte
 
     @Override
     public void deleteByFlightNumber(String flightNumber) {
-        favorites.remove(flightNumber);
-        System.out.println("Removed flight from favorites: " + flightNumber);
+        if (favorites.remove(flightNumber) != null) {
+            Logger.getInstance().info(CLASS_NAME, "Removed flight from favorites: " + flightNumber);
+        } else {
+            Logger.getInstance().warn(CLASS_NAME, "Attempted to remove non-existent flight: " + flightNumber);
+        }
     }
 }

@@ -111,7 +111,6 @@ public class FlightRadarDataAccess implements FlightDataAccessInterface {
                 return FlightStatus.LANDED;
             case "cancelled":
                 return FlightStatus.CANCELLED; // You might need to add this to your FlightStatus enum
-            case "diverted":
             case "incident":
                 return FlightStatus.DELAYED; // Or create a new status for these
             default:

@@ -4,6 +4,7 @@ import org.lobster.entity.MapCoordinate;
 import org.lobster.entity.MapPlane;
 import org.lobster.interface_adapter.map_view.MapViewController;
 import org.lobster.interface_adapter.map_view.MapViewModel;
+import org.lobster.util.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +22,7 @@ import javax.imageio.ImageIO;
  */
 public class MapPanel extends JPanel implements PropertyChangeListener {
 
+    private static final String CLASS_NAME = "MapPanel";
     private final transient MapViewController controller;
     private final transient MapViewModel viewModel;
     private transient BufferedImage worldMapImage;
@@ -59,12 +61,12 @@ public class MapPanel extends JPanel implements PropertyChangeListener {
             InputStream imageStream = getClass().getResourceAsStream("/mercatorworldmap.jpg");
             if (imageStream != null) {
                 worldMapImage = ImageIO.read(imageStream);
-                System.out.println("World map image loaded successfully");
+                Logger.getInstance().info(CLASS_NAME, "World map image loaded successfully");
             } else {
-                System.err.println("Could not find mercatorworldmap.jpg in resources");
+                Logger.getInstance().warn(CLASS_NAME, "Could not find mercatorworldmap.jpg in resources");
             }
         } catch (IOException e) {
-            System.err.println("Failed to load world map image: " + e.getMessage());
+            Logger.getInstance().error(CLASS_NAME, "Failed to load world map image", e);
             worldMapImage = null;
         }
     }
