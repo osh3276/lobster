@@ -55,7 +55,15 @@ public class FlightRadarDataAccess implements FlightDataAccessInterface {
         String origIata = flightInfo.getString("orig_iata");
         String destIata = flightInfo.getString("dest_iata");
         String operatingAs = flightInfo.getString("operating_as");
-        Date eta = Date.from(Instant.parse(flightInfo.getString("eta")));
+        Date eta = null;
+        String rawEta = flightInfo.optString("eta", null);
+        if (rawEta != null && !rawEta.isBlank()) {
+            try {
+                eta = Date.from(Instant.parse(rawEta));
+            } catch (Exception e) {
+                System.err.println("Failed to parse ETA '" + rawEta + "' for flight " + flightNum);
+            }
+        }
 
         Airline airline = mapApiResponseToAirline(service.getAirline(operatingAs));
         Airport departure = mapApiResponseToAirport(service.getAirport(origIata));
@@ -111,7 +119,6 @@ public class FlightRadarDataAccess implements FlightDataAccessInterface {
                 return FlightStatus.LANDED;
             case "cancelled":
                 return FlightStatus.CANCELLED; // You might need to add this to your FlightStatus enum
-            case "diverted":
             case "incident":
                 return FlightStatus.DELAYED; // Or create a new status for these
             default:

@@ -2,6 +2,8 @@ package org.lobster.use_case.map_view;
 
 import org.lobster.entity.*;
 import org.lobster.interface_adapter.FlightDataAccessInterface;
+import org.lobster.util.Logger;
+import org.lobster.exception.MapException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.List;
  */
 public class UpdateMapInteractor implements UpdateMapInputBoundary {
     
+    private static final String CLASS_NAME = "UpdateMapInteractor";
     private final FlightDataAccessInterface flightDataAccess;
     private final UpdateMapOutputBoundary presenter;
     
@@ -75,7 +78,7 @@ public class UpdateMapInteractor implements UpdateMapInputBoundary {
                         }
                     }
                 } catch (Exception e) {
-                    System.err.println("Failed to get position for flight " + flightNumber + ": " + e.getMessage());
+                    Logger.getInstance().warn(CLASS_NAME, "Failed to get position for flight " + flightNumber, e);
                 }
             }
             
@@ -90,6 +93,7 @@ public class UpdateMapInteractor implements UpdateMapInputBoundary {
             presenter.present(outputData);
             
         } catch (Exception e) {
+            Logger.getInstance().error(CLASS_NAME, "Failed to update map", e);
             UpdateMapOutputData errorData = new UpdateMapOutputData(
                 new ArrayList<>(), null, false, 
                 "Failed to update map: " + e.getMessage()

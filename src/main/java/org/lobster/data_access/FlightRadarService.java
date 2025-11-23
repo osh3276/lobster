@@ -1,49 +1,54 @@
 package org.lobster.data_access;
 
 import org.json.JSONObject;
+import org.lobster.util.Logger;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import org.lobster.entity.Flight;
 
 public class FlightRadarService {
 
+    private static final String CLASS_NAME = "FlightRadar24";
     private final OkHttpClient httpClient;
-    private final String API_TOKEN;
+    private static final String API_TOKEN = System.getenv("API_TOKEN");
 
     public FlightRadarService() {
         this.httpClient = new OkHttpClient();
-        this.API_TOKEN = System.getenv("API_TOKEN");
     }
 
-    public JSONObject findByCallsign(String flightNumber) {
+    public JSONObject findByCallsign(String callsign) {
         try {
-            String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?altitude_ranges=0-40000&callsigns=" + flightNumber;
-            JSONObject flightInfo = makeRequest(url).getJSONArray("data").getJSONObject(0);
-            return flightInfo;
+            String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?callsigns=" + callsign;
+            return makeRequest(url).getJSONArray("data").getJSONObject(0);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            Logger.getInstance().error(CLASS_NAME, "Failed to find flight by callsign: " + callsign, e);
+            return null;
         }
     }
 
     public JSONObject findByFlightNumber(String flightNumber) {
         try {
-            String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?altitude_ranges=0-40000&flight=" + flightNumber;
-            JSONObject flightInfo = makeRequest(url).getJSONArray("data").getJSONObject(0);
-            return flightInfo;
+            String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?flights=" + flightNumber;
+            return makeRequest(url).getJSONArray("data").getJSONObject(0);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            Logger.getInstance().error(CLASS_NAME, "Failed to find flight by flight number: " + flightNumber, e);
+            return null;
         }
     }
 
     // will only return the last 100 flights due to api limitations
-    public JSONObject returnAllFlights() {
+    public JSONObject returnAllFlights(String airlineCode) {
         try {
-            String url = "/api/static/airlines/afl/light";
+            String url = "/api/static/airlines/"+ airlineCode.toLowerCase() + "/light";
             return makeRequest(url);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            Logger.getInstance().error(CLASS_NAME, "Failed to get all flights", e);
+            return null;
         }
     }
 
@@ -52,7 +57,7 @@ public class FlightRadarService {
             String url = "https://fr24api.flightradar24.com/api/static/airlines/"+ airlineCode.toUpperCase() +"/light/";
             return makeRequest(url);
         } catch (Exception e) {
-            System.err.println("Failed to get airline: " + e.getMessage());
+            Logger.getInstance().warn(CLASS_NAME, "Failed to get airline: " + airlineCode, e);
         }
         return null;
     }
@@ -62,7 +67,7 @@ public class FlightRadarService {
             String url = "https://fr24api.flightradar24.com/api/static/airports/"+ airportCode.toUpperCase() +"/light/";
             return makeRequest(url);
         } catch (Exception e) {
-            System.err.println("Failed to get airport: " + e.getMessage());
+            Logger.getInstance().warn(CLASS_NAME, "Failed to get airport: " + airportCode, e);
         }
         return null;
     }
@@ -76,7 +81,12 @@ public class FlightRadarService {
                 .build();
 
         Response response = httpClient.newCall(request).execute();
+        assert response.body() != null;
         String responseBody = response.body().string();
         return new JSONObject(responseBody);
+    }
+
+    public List<Flight> getFlightsByAirport(String airportCode, String type) {
+        return new ArrayList<>();
     }
 }

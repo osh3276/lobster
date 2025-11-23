@@ -14,25 +14,23 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 public class MainApplicationFrame extends JFrame implements PropertyChangeListener {
-    private final AddToFavoritesController addToFavoritesController;
-    private final GetFavoritesController getFavoritesController;
-    private final RemoveFromFavoritesController removeFromFavoritesController;
-    private final ExportFlightsController exportFlightsController;
-    private final FavoritesViewModel favoritesViewModel;
-    private final SearchFlightController searchFlightController;
-    private final SearchFlightViewModel searchFlightViewModel;
-    private final MapViewController mapViewController;
-    private final MapViewModel mapViewModel;
+    private final transient AddToFavoritesController addToFavoritesController;
+    private final transient GetFavoritesController getFavoritesController;
+    private final transient RemoveFromFavoritesController removeFromFavoritesController;
+    private final transient ExportFlightsController exportFlightsController;
+    private final transient FavoritesViewModel favoritesViewModel;
+    private final transient SearchFlightController searchFlightController;
+    private final transient SearchFlightViewModel searchFlightViewModel;
+    private final transient MapViewController mapViewController;
+    private final transient MapViewModel mapViewModel;
 
     private JTextField searchField;
-    private JButton searchButton;
-    private JButton addFavoriteButton;
     private JButton removeFavoriteButton; // New remove button
     private JTextArea resultArea;
     private JLabel statusLabel;
-    private FavoritesSidebar favoritesSidebar;
     private MapPanel mapPanel;
 
     public MainApplicationFrame(AddToFavoritesController addToFavoritesController,
@@ -44,6 +42,7 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
                                 SearchFlightViewModel searchFlightViewModel,
                                 MapViewController mapViewController,
                                 MapViewModel mapViewModel) {
+
         this.addToFavoritesController = addToFavoritesController;
         this.getFavoritesController = getFavoritesController;
         this.removeFromFavoritesController = removeFromFavoritesController;
@@ -73,6 +72,7 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
     }
 
     private void createMainPanel() {
+        FavoritesSidebar favoritesSidebar;
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         splitPane.setDividerLocation(650);
         splitPane.setResizeWeight(0.7);
@@ -107,6 +107,8 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
     }
 
     private JPanel createSearchPanel() {
+        JButton addFavoriteButton;
+        JButton searchButton;
         JPanel searchPanel = new JPanel(new FlowLayout());
 
         searchField = new JTextField(15);
@@ -155,13 +157,15 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
         var message = searchFlightViewModel.getMessage();
         StringBuilder sb = new StringBuilder();
         if (flight != null) {
-            sb.append(flight.toString()).append("\n\n");
+            sb.append(flight).append("\n\n");
             
             // Update the map with the searched flight
-            java.util.List<String> flightNumbers = java.util.Arrays.asList(flightNumber);
+            java.util.List<String> flightNumbers = List.of(flightNumber);
             mapPanel.updatePlanePositions(flightNumbers);
+            sb.append(message);
+        } else {
+            sb.append("No flight found for ").append(flightNumber).append("\n\n");
         }
-        sb.append(message);
 
         resultArea.setText(sb.toString());
         statusLabel.setText(message);

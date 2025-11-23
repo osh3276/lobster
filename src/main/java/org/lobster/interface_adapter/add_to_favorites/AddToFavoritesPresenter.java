@@ -3,8 +3,11 @@ package org.lobster.interface_adapter.add_to_favorites;
 import org.lobster.use_case.add_to_favorites.AddToFavoritesOutputBoundary;
 import org.lobster.use_case.add_to_favorites.AddToFavoritesOutputData;
 import org.lobster.interface_adapter.FavoritesViewModel;
+import org.lobster.util.Logger;
 
 public class AddToFavoritesPresenter implements AddToFavoritesOutputBoundary {
+    private static final String CLASS_NAME = AddToFavoritesPresenter.class.getSimpleName();
+    
     private final FavoritesViewModel viewModel;
 
     public AddToFavoritesPresenter(FavoritesViewModel viewModel) {
@@ -13,7 +16,7 @@ public class AddToFavoritesPresenter implements AddToFavoritesOutputBoundary {
 
     @Override
     public void prepareSuccessView(AddToFavoritesOutputData outputData) {
-        System.out.println("DEBUG: Presenter - prepareSuccessView called");
+        Logger.getInstance().debug(CLASS_NAME, "prepareSuccessView called");
         var state = new FavoritesViewModel.State(
                 true,
                 outputData.getMessage(),
