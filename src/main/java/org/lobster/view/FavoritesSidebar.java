@@ -260,7 +260,7 @@ public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
                 updateFavoritesList(state.allFavorites);
 
                 // Show removal confirmation in status if needed
-                if (state.success && state.lastAddedFlight == null && state.message.contains("removed")) {
+                if (state.success && state.affectedFlight == null && state.message.contains("removed")) {
                     // This was a removal operation
                     JOptionPane.showMessageDialog(this, state.message, "Success",
                             JOptionPane.INFORMATION_MESSAGE);

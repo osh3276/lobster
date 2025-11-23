@@ -188,15 +188,18 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
                     statusLabel.setText("✓ " + state.message);
                     statusLabel.setForeground(Color.GREEN);
 
-                    if (state.lastAddedFlight != null) {
-                        // This was an add operation
-                        resultArea.setText("Successfully added to favorites!\n\n" +
-                                "Flight: " + state.lastAddedFlight.getCallsign() + "\n" +
-                                "Airline: " + state.lastAddedFlight.getAirline() + "\n" +
-                                "Route: " + state.lastAddedFlight.getDeparture().getName() + " → " +
-                                state.lastAddedFlight.getArrival().getName() + "\n"); // +
-                                //"Status: " + state.lastAddedFlight.getStatus().getDisplayName() + " " +
-                                // state.lastAddedFlight.getStatus().getColorCode());
+                    if (state.affectedFlight != null) {
+                        if (state.message.contains("added") || state.message.contains("saved")) {
+                            // This was an ADD operation
+                            resultArea.setText("Successfully added to favorites!\n\n" +
+                                    "Flight: " + state.affectedFlight.getCallsign() + "\n" +
+                                    "Airline: " + state.affectedFlight.getAirline() + "\n" +
+                                    "Route: " + state.affectedFlight.getDeparture().getName() + " → " +
+                                    state.affectedFlight.getArrival().getName() + "\n");
+                        } else if (state.message.contains("removed")) {
+                            // This was a REMOVE operation
+                            resultArea.setText("Successfully removed from favorites!");
+                        }
                     }
                 } else {
                     statusLabel.setText("✗ " + state.message);

@@ -13,13 +13,13 @@ public class FavoritesViewModel {
     public static class State {
         public final boolean success;
         public final String message;
-        public final Flight lastAddedFlight;
+        public final Flight affectedFlight;
         public final List<Flight> allFavorites;
 
-        public State(boolean success, String message, Flight lastAddedFlight, List<Flight> allFavorites) {
+        public State(boolean success, String message, Flight affectedFlight, List<Flight> allFavorites) {
             this.success = success;
             this.message = message;
-            this.lastAddedFlight = lastAddedFlight;
+            this.affectedFlight = affectedFlight;
             this.allFavorites = allFavorites;
         }
     }
