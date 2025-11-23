@@ -23,7 +23,7 @@ public class FlightRadarService {
 
     public JSONObject findByCallsign(String callsign) {
         try {
-            String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?altitude_ranges=0-40000&callsigns=" + callsign;
+            String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?callsigns=" + callsign;
             return makeRequest(url).getJSONArray("data").getJSONObject(0);
         } catch (Exception e) {
             Logger.getInstance().error(CLASS_NAME, "Failed to find flight by callsign: " + callsign, e);
@@ -33,7 +33,7 @@ public class FlightRadarService {
 
     public JSONObject findByFlightNumber(String flightNumber) {
         try {
-            String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?altitude_ranges=0-40000&flight=" + flightNumber;
+            String url = "https://fr24api.flightradar24.com/api/live/flight-positions/full?flights=" + flightNumber;
             return makeRequest(url).getJSONArray("data").getJSONObject(0);
         } catch (Exception e) {
             Logger.getInstance().error(CLASS_NAME, "Failed to find flight by flight number: " + flightNumber, e);
