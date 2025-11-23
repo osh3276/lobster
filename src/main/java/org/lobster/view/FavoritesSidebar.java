@@ -313,7 +313,7 @@ public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
                 checkBox.setSelected(false);
             }
 
-            flightNumberLabel.setText(flight.getCallsign() + " - " + flight.getAirline());
+            flightNumberLabel.setText(flight.getFlightNumber() + " - " + flight.getAirline());
             routeLabel.setText(flight.getDeparture().getIata() + " → " + flight.getArrival().getIata());
             if (flight.getStatus() != null) {
                 statusLabel.setText(flight.getStatus().getColorCode() + " " + flight.getStatus().getDisplayName());
