@@ -26,39 +26,39 @@ public class AddToFavoritesInteractor implements AddToFavoritesInputBoundary {
         if (inputData.getFlightNumber() == null){
             return;
         }
-        String flightIdentifier = inputData.getFlightNumber().trim().toUpperCase();
-        Logger.getInstance().debug(CLASS_NAME, "executing for: " + flightIdentifier);
+        String flightNumber = inputData.getFlightNumber().trim().toUpperCase();
+        Logger.getInstance().debug(CLASS_NAME, "executing for flight number: " + flightNumber);
 
         try {
             // 1. Validate input
-            if (flightIdentifier.isEmpty()) {
-                outputBoundary.prepareFailView("Please enter a flight number/callsign");
+            if (flightNumber.isEmpty()) {
+                outputBoundary.prepareFailView("Please enter a flight number");
                 return;
             }
 
-            // 2. Check if flight exists using findByCallSign (like search does)
-            Flight flight = flightDataGateway.findByCallSign(flightIdentifier);
-            Logger.getInstance().debug(CLASS_NAME, "Looking for: '" + flightIdentifier + "'");
+            // 2. Check if flight exists using flight number directly
+            Flight flight = flightDataGateway.findByFlightNumber(flightNumber);
+            Logger.getInstance().debug(CLASS_NAME, "Looking for flight number: '" + flightNumber + "'");
             Logger.getInstance().debug(CLASS_NAME, "Found flight: " + (flight != null ?
-                    "Number: '" + flight.getFlightNumber() + "', Callsign: '" + flight.getCallsign() + "'" : "null"));
+                    "Number: '" + flight.getFlightNumber() + "'" : "null"));
 
             if (flight == null) {
-                outputBoundary.prepareFailView("No flight found for " + flightIdentifier);
+                outputBoundary.prepareFailView("No flight found for flight number " + flightNumber);
                 return;
             }
 
-            // 3. Check for duplicates using the actual flight number from the found flight
-            boolean isDuplicate = favoritesDAO.existsByFlightNumber(flight.getFlightNumber());
+            // 3. Check for duplicates using the flight number
+            boolean isDuplicate = favoritesDAO.existsByFlightNumber(flightNumber);
             Logger.getInstance().debug(CLASS_NAME, "Is duplicate: " + isDuplicate);
 
             if (isDuplicate) {
-                outputBoundary.prepareFailView("Flight " + flight.getFlightNumber() + " is already in favorites");
+                outputBoundary.prepareFailView("Flight " + flightNumber + " is already in favorites");
                 return;
             }
 
             // 4. Save to favorites
             favoritesDAO.save(flight);
-            Logger.getInstance().info(CLASS_NAME, "Flight saved to favorites: " + flight.getFlightNumber());
+            Logger.getInstance().info(CLASS_NAME, "Flight saved to favorites: " + flightNumber);
 
             // 5. Get updated favorites list
             var updatedFavorites = favoritesDAO.findAll();
@@ -67,7 +67,7 @@ public class AddToFavoritesInteractor implements AddToFavoritesInputBoundary {
             // 6. Prepare success response
             AddToFavoritesOutputData outputData = new AddToFavoritesOutputData(
                     true,
-                    "Flight " + flight.getFlightNumber() + " added to favorites!",
+                    "Flight " + flightNumber + " added to favorites!",
                     flight,
                     updatedFavorites
             );
