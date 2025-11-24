@@ -221,16 +221,14 @@ public class MapPanel extends JPanel implements PropertyChangeListener {
         
         // Translate to plane position and rotate by heading
         g2d.translate(pos.getX(), pos.getY());
-        // Note: Heading is already correct for Mercator - no adjustment needed for small areas
         g2d.rotate(Math.toRadians(plane.getHeading()));
         
-        // Draw plane symbol (simple isosceles triangle)
+        // Draw plane symbol (simple triangle/arrow)
         g2d.setColor(PLANE_COLOR);
         g2d.setStroke(new BasicStroke(2));
         
-        // Simple isosceles triangle pointing up (towards heading)
-        int[] xPoints = {0, -6, 6};
-        int[] yPoints = {-8, 6, 6};
+        int[] xPoints = {0, -8, -5, -5, -8, 0, 8, 5, 5, 8};
+        int[] yPoints = {-10, 3, 3, 8, 8, 5, 8, 8, 3, 3};
         
         g2d.fillPolygon(xPoints, yPoints, xPoints.length);
         g2d.setColor(Color.BLACK);
