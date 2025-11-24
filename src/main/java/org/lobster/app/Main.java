@@ -14,6 +14,9 @@ import org.lobster.interface_adapter.remove_from_favorites.RemoveFromFavoritesCo
 import org.lobster.interface_adapter.remove_from_favorites.RemoveFromFavoritesPresenter;
 import org.lobster.interface_adapter.export_flights.ExportFlightsController;
 import org.lobster.interface_adapter.export_flights.ExportFlightsPresenter;
+import org.lobster.interface_adapter.browse_airport.BrowseAirportController;
+import org.lobster.interface_adapter.browse_airport.BrowseAirportViewModel;
+import org.lobster.interface_adapter.browse_airport.BrowseAirportPresenter;
 
 import org.lobster.interface_adapter.search_flight.SearchFlightController;
 import org.lobster.interface_adapter.search_flight.SearchFlightPresenter;
@@ -33,6 +36,7 @@ import org.lobster.use_case.remove_from_favorites.RemoveFromFavoritesOutputBound
 import org.lobster.use_case.export_flights.ExportFlightsInputBoundary;
 import org.lobster.use_case.export_flights.ExportFlightsInteractor;
 import org.lobster.use_case.export_flights.ExportFlightsOutputBoundary;
+import org.lobster.use_case.browse_airport.BrowseAirportInteractor;
 
 import org.lobster.use_case.search_flight.SearchFlightInputBoundary;
 import org.lobster.use_case.search_flight.SearchFlightInteractor;
@@ -42,6 +46,7 @@ import org.lobster.use_case.map_view.UpdateMapInteractor;
 import org.lobster.use_case.map_view.UpdateMapOutputBoundary;
 import org.lobster.util.Logger;
 import org.lobster.view.MainApplicationFrame;
+import org.lobster.data_access.FlightRadarService;
 
 import javax.swing.*;
 
@@ -127,6 +132,14 @@ public class Main {
         ExportFlightsInputBoundary exportFlightsInteractor = new ExportFlightsInteractor(exportFlightsOutputBoundary);
         ExportFlightsController exportFlightsController = new ExportFlightsController(exportFlightsInteractor);
 
+        // Browse Airport use case
+        FlightRadarService flightRadarService = new FlightRadarService();
+        BrowseAirportViewModel browseAirportViewModel = new BrowseAirportViewModel();
+        BrowseAirportPresenter browseAirportPresenter = new BrowseAirportPresenter(browseAirportViewModel);
+        BrowseAirportInteractor browseAirportInteractor =
+                new BrowseAirportInteractor(flightRadarService, browseAirportPresenter);
+        BrowseAirportController browseAirportController = new BrowseAirportController(browseAirportInteractor);
+
         // Start the application on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
             try {
@@ -144,7 +157,9 @@ public class Main {
                     searchFlightController,
                     searchFlightViewModel,
                     mapViewController,
-                    mapViewModel
+                    mapViewModel,
+                    browseAirportController,
+                    browseAirportViewModel
             );
             frame.setVisible(true);
         });
