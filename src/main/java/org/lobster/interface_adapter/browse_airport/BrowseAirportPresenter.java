@@ -14,5 +14,6 @@ public class BrowseAirportPresenter implements BrowseAirportOutputBoundary {
     public void present(BrowseAirportOutputData data) {
         viewModel.setFlights(data.getFlights());
         viewModel.setMessage(data.getMessage());
+        viewModel.firePropertyChanged();
     }
 }

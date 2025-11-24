@@ -5,8 +5,8 @@ public class BrowseAirportInputData {
     private final String type;
 
     public BrowseAirportInputData(String airportCode, String type) {
-        this.airportCode = airportCode.toUpperCase().trim();
-        this.type = type.toLowerCase().trim();
+        this.airportCode = (airportCode == null ? "" : airportCode.trim().toUpperCase());
+        this.type = (type == null ? "" : type.trim().toLowerCase());
     }
 
     public String getAirportCode() {

@@ -1,6 +1,9 @@
 package org.lobster.interface_adapter.browse_airport;
 
 import org.lobster.entity.Flight;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 
 public class BrowseAirportViewModel {
@@ -21,5 +24,17 @@ public class BrowseAirportViewModel {
 
     public void setMessage(String message){
         this.message = message;
+    }
+
+    public void firePropertyChanged() {
+        support.firePropertyChange("state", null, null);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
     }
 }
