@@ -328,3 +328,15 @@ org.json.JSONException: JSONArray[0] not found.
 	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
 	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
 	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+[2025-11-24 15:29:16.446] INFO  MapPanel - World map image loaded successfully
+[2025-11-24 15:47:05.328] INFO  MapPanel - World map image loaded successfully
+[2025-11-24 15:48:26.870] INFO  MapPanel - World map image loaded successfully
+[2025-11-24 15:57:09.543] INFO  MapPanel - World map image loaded successfully
+[2025-11-24 16:12:32.350] INFO  MapPanel - World map image loaded successfully
+[2025-11-24 16:12:57.015] INFO  BrowseAirportInteractor - Fetching arrivals for aiport HND
+[2025-11-24 16:13:01.437] INFO  BrowseAirportInteractor - Fetching arrivals for aiport YYZ
+[2025-11-24 16:13:04.485] INFO  BrowseAirportInteractor - Fetching arrivals for aiport YVR
+[2025-11-24 16:13:06.497] INFO  BrowseAirportInteractor - Fetching arrivals for aiport YVV
+[2025-11-24 16:13:16.595] INFO  BrowseAirportInteractor - Fetching departures for aiport HND
+[2025-11-24 16:13:18.243] INFO  BrowseAirportInteractor - Fetching departures for aiport HND
+[2025-11-24 16:13:20.303] INFO  BrowseAirportInteractor - Fetching arrivals for aiport HND
