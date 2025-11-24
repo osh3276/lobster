@@ -759,3 +759,13 @@ org.json.JSONException: JSONArray[0] not found.
 [2025-11-23 13:50:16.443] DEBUG AddToFavoritesInteractor - Updated favorites count: 1
 [2025-11-23 13:50:16.446] DEBUG AddToFavoritesPresenter - prepareSuccessView called
 [2025-11-23 13:50:23.888] INFO  InMemoryFavoriteFlightsDAO - Removed flight from favorites: AC412
+[2025-11-23 13:50:56.880] INFO  MapPanel - World map image loaded successfully
+[2025-11-23 13:53:35.500] DEBUG AddToFavoritesInteractor - executing for flight number: AC837
+[2025-11-23 13:53:36.393] DEBUG AddToFavoritesInteractor - Looking for flight number: 'AC837'
+[2025-11-23 13:53:36.394] DEBUG AddToFavoritesInteractor - Found flight: Number: 'AC837'
+[2025-11-23 13:53:36.396] DEBUG AddToFavoritesInteractor - Is duplicate: false
+[2025-11-23 13:53:36.397] INFO  InMemoryFavoriteFlightsDAO - Saved flight to favorites: ACA837
+[2025-11-23 13:53:36.398] INFO  AddToFavoritesInteractor - Flight saved to favorites: AC837
+[2025-11-23 13:53:36.399] DEBUG AddToFavoritesInteractor - Updated favorites count: 1
+[2025-11-23 13:53:36.402] DEBUG AddToFavoritesPresenter - prepareSuccessView called
+[2025-11-23 13:55:42.303] INFO  InMemoryFavoriteFlightsDAO - Removed flight from favorites: AC837
