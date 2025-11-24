@@ -3,6 +3,7 @@ package org.lobster.app;
 import org.lobster.data_access.FlightRadarDataAccess;
 import org.lobster.data_access.InMemoryFavoriteFlightsDAO;
 //Interface Adapters
+import org.lobster.data_access.JsonFileFavoriteFlightsDAO;
 import org.lobster.interface_adapter.FavoritesViewModel;
 import org.lobster.interface_adapter.FavoriteFlightsDataAccessInterface;
 import org.lobster.interface_adapter.FlightDataAccessInterface;
@@ -56,7 +57,7 @@ public class Main {
     }
 
     public FavoriteFlightsDataAccessInterface favoriteFlightsDataAccess() {
-        return new InMemoryFavoriteFlightsDAO();
+        return new JsonFileFavoriteFlightsDAO();
     }
 
     public FavoritesViewModel favoritesViewModel() {

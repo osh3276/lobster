@@ -769,3 +769,27 @@ org.json.JSONException: JSONArray[0] not found.
 [2025-11-23 13:53:36.399] DEBUG AddToFavoritesInteractor - Updated favorites count: 1
 [2025-11-23 13:53:36.402] DEBUG AddToFavoritesPresenter - prepareSuccessView called
 [2025-11-23 13:55:42.303] INFO  InMemoryFavoriteFlightsDAO - Removed flight from favorites: AC837
+[2025-11-24 16:25:33.972] INFO  MapPanel - World map image loaded successfully
+[2025-11-24 16:25:56.251] DEBUG AddToFavoritesInteractor - executing for flight number: AC266
+[2025-11-24 16:25:58.323] DEBUG AddToFavoritesInteractor - Looking for flight number: 'AC266'
+[2025-11-24 16:25:58.324] DEBUG AddToFavoritesInteractor - Found flight: Number: 'AC266'
+[2025-11-24 16:25:58.325] DEBUG AddToFavoritesInteractor - Is duplicate: false
+[2025-11-24 16:25:58.326] INFO  InMemoryFavoriteFlightsDAO - Saved flight to favorites: ACA266
+[2025-11-24 16:25:58.327] INFO  AddToFavoritesInteractor - Flight saved to favorites: AC266
+[2025-11-24 16:25:58.329] DEBUG AddToFavoritesInteractor - Updated favorites count: 1
+[2025-11-24 16:25:58.331] DEBUG AddToFavoritesPresenter - prepareSuccessView called
+[2025-11-24 16:26:15.451] INFO  MapPanel - World map image loaded successfully
+[2025-11-24 16:32:20.754] INFO  MapPanel - World map image loaded successfully
+[2025-11-24 16:32:55.107] DEBUG AddToFavoritesInteractor - executing for flight number: AC2
+[2025-11-24 16:32:56.196] DEBUG AddToFavoritesInteractor - Looking for flight number: 'AC2'
+[2025-11-24 16:32:56.197] DEBUG AddToFavoritesInteractor - Found flight: Number: 'AC2'
+[2025-11-24 16:32:56.199] DEBUG AddToFavoritesInteractor - Is duplicate: false
+[2025-11-24 16:32:56.203] DEBUG JsonFileFavoriteFlightsDAO - Saved 1 favorites to file
+[2025-11-24 16:32:56.203] INFO  JsonFileFavoriteFlightsDAO - Saved flight to favorites: AC2
+[2025-11-24 16:32:56.206] INFO  AddToFavoritesInteractor - Flight saved to favorites: AC2
+[2025-11-24 16:32:56.207] DEBUG AddToFavoritesInteractor - Updated favorites count: 1
+[2025-11-24 16:32:56.209] DEBUG AddToFavoritesPresenter - prepareSuccessView called
+[2025-11-24 16:33:05.814] INFO  JsonFileFavoriteFlightsDAO - Loaded 1 favorites from file
+[2025-11-24 16:33:08.200] INFO  MapPanel - World map image loaded successfully
+[2025-11-24 16:33:23.021] DEBUG JsonFileFavoriteFlightsDAO - Saved 0 favorites to file
+[2025-11-24 16:33:23.025] INFO  JsonFileFavoriteFlightsDAO - Removed flight from favorites: AC2
