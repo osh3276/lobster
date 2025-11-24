@@ -155,15 +155,18 @@ public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
     private void removeSelectedFavorite() {
         Flight selectedFlight = favoritesList.getSelectedValue();
         if (selectedFlight != null) {
+            // Use flight number instead of callsign
+            String flightNumber = selectedFlight.getFlightNumber();
+
             int confirm = JOptionPane.showConfirmDialog(
                     this,
-                    "Remove " + selectedFlight.getCallsign() + " from favorites?",
+                    "Remove " + flightNumber + " from favorites?",
                     "Confirm Removal",
                     JOptionPane.YES_NO_OPTION
             );
 
             if (confirm == JOptionPane.YES_OPTION) {
-                removeFromFavoritesController.execute(selectedFlight.getCallsign());
+                removeFromFavoritesController.execute(flightNumber);
             }
         } else {
             JOptionPane.showMessageDialog(this, "Please select a flight to remove");
@@ -310,7 +313,7 @@ public class FavoritesSidebar extends JPanel implements PropertyChangeListener {
                 checkBox.setSelected(false);
             }
 
-            flightNumberLabel.setText(flight.getCallsign() + " - " + flight.getAirline());
+            flightNumberLabel.setText(flight.getFlightNumber() + " - " + flight.getAirline());
             routeLabel.setText(flight.getDeparture().getIata() + " → " + flight.getArrival().getIata());
             if (flight.getStatus() != null) {
                 statusLabel.setText(flight.getStatus().getColorCode() + " " + flight.getStatus().getDisplayName());
