@@ -18,7 +18,7 @@ public class BrowseAirportPanel extends JPanel implements PropertyChangeListener
     private JTextField airportField;
     private JComboBox<String> typeDropdown;
     private JButton browseButton;
-    private JTextArea resultArea;
+    private JTextArea airportResultArea;
 
     public BrowseAirportPanel(BrowseAirportController controller,
                               BrowseAirportViewModel viewModel) {
@@ -31,7 +31,7 @@ public class BrowseAirportPanel extends JPanel implements PropertyChangeListener
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder("Browse Airport"));
 
-        // TOP PANEL (inputs)
+        // TOP PANEL
         JPanel inputPanel = new JPanel(new FlowLayout());
 
         airportField = new JTextField(5);
@@ -54,11 +54,11 @@ public class BrowseAirportPanel extends JPanel implements PropertyChangeListener
         add(inputPanel, BorderLayout.NORTH);
 
         // RESULTS AREA
-        resultArea = new JTextArea();
-        resultArea.setEditable(false);
-        resultArea.setMargin(new Insets(10, 10, 10, 10));
+        airportResultArea = new JTextArea();
+        airportResultArea.setEditable(false);
+        airportResultArea.setMargin(new Insets(10, 10, 10, 10));
 
-        add(new JScrollPane(resultArea), BorderLayout.CENTER);
+        add(new JScrollPane(airportResultArea), BorderLayout.CENTER);
     }
 
     @Override
@@ -80,6 +80,6 @@ public class BrowseAirportPanel extends JPanel implements PropertyChangeListener
             }
         }
 
-        resultArea.setText(sb.toString());
+        airportResultArea.setText(sb.toString());
     }
 }
