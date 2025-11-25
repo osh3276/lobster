@@ -94,7 +94,6 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(createSearchPanel(), BorderLayout.NORTH);
-        mainPanel.add(browseAirportPanel(), BorderLayout.SOUTH);
 
         // Create a split pane for the result area and map
         JSplitPane mainContentSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -102,10 +101,19 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
         mainContentSplitPane.setResizeWeight(0.6);
         
         mainContentSplitPane.setTopComponent(createResultArea());
-        
+
+        // Create second split pane for airport panel and map
+        JSplitPane airportSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        airportSplitPane.setDividerLocation(150);
+        airportSplitPane.setResizeWeight(0.3);
+
+        airportSplitPane.setTopComponent(browseAirportPanel);
+
         // Create the map panel
         mapPanel = new MapPanel(mapViewController, mapViewModel);
-        mainContentSplitPane.setBottomComponent(mapPanel);
+        airportSplitPane.setBottomComponent(mapPanel);
+
+        mainContentSplitPane.setBottomComponent(airportSplitPane);
         
         mainPanel.add(mainContentSplitPane, BorderLayout.CENTER);
 
@@ -142,10 +150,6 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
         searchPanel.add(addFavoriteButton);
 
         return searchPanel;
-    }
-
-    private JPanel browseAirportPanel() {
-        return new BrowseAirportPanel(browseAirportController, browseAirportViewModel);
     }
 
     private JComponent createResultArea() {
@@ -230,68 +234,5 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
                 }
             });
         }
-        if (evt.getSource() == browseAirportViewModel && "state".equals(evt.getPropertyName())) {
-            SwingUtilities.invokeLater(() -> {
-                var flights = browseAirportViewModel.getFlights();
-                var message = browseAirportViewModel.getMessage();
-
-                StringBuilder sb = new StringBuilder();
-
-                if (flights != null && !flights.isEmpty()) {
-                    sb.append("Airport results:\n\n");
-                    for (var f : flights) {
-                        sb.append(f).append("\n");
-                    }
-                }
-
-                sb.append("\n").append(message);
-                resultArea.setText(sb.toString());
-
-                statusLabel.setText(message);
-                statusLabel.setForeground((flights != null && !flights.isEmpty()) ? Color.GREEN : Color.RED);
-            });
-        }
-    }
-
-    private void performBrowseAirport(String airportCode, String type) {
-        if (airportCode == null || airportCode.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter an airport code");
-            return;
-        }
-
-        resultArea.setText("Fetching " + type + " for " + airportCode + "...");
-
-        browseAirportController.onBrowse(airportCode, type);
-
-        var flights = browseAirportViewModel.getFlights();
-        var message = browseAirportViewModel.getMessage();
-
-        StringBuilder sb = new StringBuilder();
-
-        if (flights != null && !flights.isEmpty()) {
-            sb.append("Results for ").append(airportCode).append(" (").append(type).append("):\n\n");
-
-            for (var f : flights) {
-                sb.append("• ").append(f.getCallsign())
-                        .append(" — ").append(f.getDeparture().getIata())
-                        .append(" → ").append(f.getArrival().getIata()).append("\n");
-            }
-
-            // update map with all flight positions
-            java.util.List<String> flightNumbers = flights.stream()
-                    .map(f -> f.getCallsign())
-                    .toList();
-
-            mapPanel.updatePlanePositions(flightNumbers);
-
-        } else {
-            sb.append("No ").append(type).append(" for ").append(airportCode).append(".\n");
-        }
-
-        sb.append("\n").append(message);
-        resultArea.setText(sb.toString());
-
-        statusLabel.setText(message);
-        statusLabel.setForeground((flights != null && !flights.isEmpty()) ? Color.GREEN : Color.RED);
     }
 }

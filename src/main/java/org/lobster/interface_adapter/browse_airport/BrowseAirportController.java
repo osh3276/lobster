@@ -10,8 +10,8 @@ public class BrowseAirportController {
         this.browseAirportUseCase = browseAirportUseCase;
     }
 
-    public void onBrowse(String airportCode, String type) {
-        BrowseAirportInputData inputData = new BrowseAirportInputData(airportCode, type);
+    public void onBrowse(String airportCode) {
+        BrowseAirportInputData inputData = new BrowseAirportInputData(airportCode);
         browseAirportUseCase.execute(inputData);
     }
 }

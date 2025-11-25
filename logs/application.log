@@ -340,3 +340,12 @@ org.json.JSONException: JSONArray[0] not found.
 [2025-11-24 16:13:16.595] INFO  BrowseAirportInteractor - Fetching departures for aiport HND
 [2025-11-24 16:13:18.243] INFO  BrowseAirportInteractor - Fetching departures for aiport HND
 [2025-11-24 16:13:20.303] INFO  BrowseAirportInteractor - Fetching arrivals for aiport HND
+[2025-11-25 14:23:09.635] INFO  MapPanel - World map image loaded successfully
+[2025-11-25 14:27:07.227] INFO  MapPanel - World map image loaded successfully
+[2025-11-25 14:27:12.638] INFO  BrowseAirportInteractor - Fetching arrivals for aiport YYZ
+[2025-11-25 14:27:18.942] INFO  BrowseAirportInteractor - Fetching departures for aiport YYZ
+[2025-11-25 14:38:21.326] INFO  MapPanel - World map image loaded successfully
+[2025-11-25 14:52:24.819] INFO  MapPanel - World map image loaded successfully
+[2025-11-25 14:53:21.266] INFO  MapPanel - World map image loaded successfully
+[2025-11-25 15:08:12.716] INFO  MapPanel - World map image loaded successfully
+[2025-11-25 15:08:46.957] INFO  MapPanel - World map image loaded successfully

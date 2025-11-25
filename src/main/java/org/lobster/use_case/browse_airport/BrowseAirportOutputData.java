@@ -1,22 +1,17 @@
 package org.lobster.use_case.browse_airport;
 
-import org.lobster.entity.Flight;
-import java.util.List;
+import org.lobster.entity.Airport;
 
 public class BrowseAirportOutputData {
-    private final List<Flight> flights;
+
+    private final Airport airport;
     private final String message;
 
-    public BrowseAirportOutputData(List<Flight> flights, String message) {
-        this.flights = flights;
+    public BrowseAirportOutputData(Airport airport, String message) {
+        this.airport = airport;
         this.message = message;
     }
 
-    public List<Flight> getFlights() {
-        return flights;
-    }
-
-    public String getMessage() {
-        return message;
-    }
+    public Airport getAirport() { return airport; }
+    public String getMessage() { return message; }
 }
