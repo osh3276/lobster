@@ -1,5 +1,6 @@
 package org.lobster.interface_adapter.status_change;
 
+import org.lobster.interface_adapter.FavoritesViewModel;
 import org.lobster.use_case.status_change.StatusChangeOutputBoundary;
 import org.lobster.use_case.status_change.StatusChangeOutputData;
 

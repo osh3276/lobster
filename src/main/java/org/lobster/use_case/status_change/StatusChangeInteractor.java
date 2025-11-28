@@ -3,15 +3,16 @@ package org.lobster.use_case.status_change;
 import org.lobster.interface_adapter.FavoriteFlightsDataAccessInterface;
 import org.lobster.data_access.FlightRadarDataAccess;
 import org.lobster.entity.Flight;
+import org.lobster.interface_adapter.FlightDataAccessInterface;
 
 public class StatusChangeInteractor implements StatusChangeInputBoundary{
 
     private final FavoriteFlightsDataAccessInterface favoritesDAO;
-    private final FlightRadarDataAccess flightAPI;
+    private final FlightDataAccessInterface flightAPI;
     private final StatusChangeOutputBoundary presenter;
 
     public StatusChangeInteractor(FavoriteFlightsDataAccessInterface favoritesDAO,
-                                  FlightRadarDataAccess flightAPI,
+                                  FlightDataAccessInterface flightAPI,
                                   StatusChangeOutputBoundary presenter) {
         this.favoritesDAO = favoritesDAO;
         this.flightAPI = flightAPI;
