@@ -1,6 +1,5 @@
 package org.lobster.interface_adapter.status_change;
 
-import org.lobster.interface_adapter.FavoritesViewModel;
 import org.lobster.use_case.status_change.StatusChangeOutputBoundary;
 import org.lobster.use_case.status_change.StatusChangeOutputData;
 
@@ -14,7 +13,7 @@ public class StatusChangePresenter implements StatusChangeOutputBoundary {
 
     @Override
     public void present(StatusChangeOutputData outputData) {
-        viewModel.setLastUpdatedFlight(outputData.getUpdatdFlight());
+        viewModel.setLastUpdatedFlight(outputData.getUpdatedFlight());
         viewModel.notifyObservers();
     }
 }
