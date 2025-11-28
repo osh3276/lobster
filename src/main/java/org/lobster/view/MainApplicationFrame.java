@@ -208,25 +208,39 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
             SwingUtilities.invokeLater(() -> {
                 var state = favoritesViewModel.getState();
                 if (state.success) {
-                    statusLabel.setText("✓ " + state.message);
-                    statusLabel.setForeground(Color.GREEN);
-
                     if (state.affectedFlight != null) {
                         if (state.message.contains("added") || state.message.contains("saved")) {
-                            // This was an ADD operation
-                            resultArea.setText("Successfully added to favorites!\n\n" +
+                            // Success popup for ADD operation
+                            String message = "Successfully added to favorites!\n\n" +
                                     "Flight: " + state.affectedFlight.getCallsign() + "\n" +
                                     "Airline: " + state.affectedFlight.getAirline() + "\n" +
                                     "Route: " + state.affectedFlight.getDeparture().getName() + " → " +
-                                    state.affectedFlight.getArrival().getName() + "\n");
+                                    state.affectedFlight.getArrival().getName();
+
+                            JOptionPane.showMessageDialog(
+                                    null, // or pass your main frame reference
+                                    message,
+                                    "Success",
+                                    JOptionPane.INFORMATION_MESSAGE
+                            );
                         } else if (state.message.contains("removed")) {
-                            // This was a REMOVE operation
-                            resultArea.setText("Successfully removed from favorites!");
+                            // Success popup for REMOVE operation
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "Successfully removed from favorites!",
+                                    "Success",
+                                    JOptionPane.INFORMATION_MESSAGE
+                            );
                         }
                     }
                 } else {
-                    statusLabel.setText("✗ " + state.message);
-                    statusLabel.setForeground(Color.RED);
+                    // Error popup
+                    JOptionPane.showMessageDialog(
+                            null,
+                            state.message,
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
                 }
             });
         }

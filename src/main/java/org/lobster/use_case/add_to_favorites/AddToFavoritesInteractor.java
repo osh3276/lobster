@@ -23,11 +23,20 @@ public class AddToFavoritesInteractor implements AddToFavoritesInputBoundary {
 
     @Override
     public void execute(AddToFavoritesInputData inputData) {
-        if (inputData.getFlightNumber() == null){
+        // Instead of silent return on null:
+        if (inputData.getFlightNumber() == null) {
+            outputBoundary.prepareFailView("Flight number is required");
             return;
         }
+
+
         String flightNumber = inputData.getFlightNumber().trim().toUpperCase();
         Logger.getInstance().debug(CLASS_NAME, "executing for flight number: " + flightNumber);
+
+        if (!flightNumber.matches("[A-Z]{2}\\d+")) {
+            outputBoundary.prepareFailView("Invalid flight number format");
+            return;
+        }
 
         try {
             // 1. Validate input
