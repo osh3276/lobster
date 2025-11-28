@@ -11,7 +11,7 @@ import org.lobster.interface_adapter.map_view.MapViewController;
 import org.lobster.interface_adapter.map_view.MapViewModel;
 import org.lobster.interface_adapter.browse_airport.BrowseAirportController;
 import org.lobster.interface_adapter.browse_airport.BrowseAirportViewModel;
-import org.lobster.view.BrowseAirportPanel;
+import org.lobster.interface_adapter.status_change.StatusChangeController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,6 +31,7 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
     private final transient MapViewModel mapViewModel;
     private final BrowseAirportController browseAirportController;
     private final BrowseAirportViewModel browseAirportViewModel;
+    private final transient StatusChangeController statusChangeController;
 
     private JTextField searchField;
     private JButton removeFavoriteButton; // New remove button
@@ -48,7 +49,8 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
                                 MapViewController mapViewController,
                                 MapViewModel mapViewModel,
                                 BrowseAirportController browseAirportController,
-                                BrowseAirportViewModel browseAirportViewModel) {
+                                BrowseAirportViewModel browseAirportViewModel,
+                                StatusChangeController statusChangeController) {
 
         this.addToFavoritesController = addToFavoritesController;
         this.getFavoritesController = getFavoritesController;
@@ -65,8 +67,11 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
         this.browseAirportController = browseAirportController;
         this.browseAirportViewModel = browseAirportViewModel;
 
+        this.statusChangeController = statusChangeController;
+
         favoritesViewModel.addPropertyChangeListener(this);
         browseAirportViewModel.addPropertyChangeListener(this);
+        statusChangeController.poll();
         initializeUI();
     }
 
