@@ -89,7 +89,6 @@ public class Main {
         if (debugMode) { testAPI("AC123"); }
         // Create an instance of Main to access the configuration methods
         Main appConfig = new Main();
-
         // Set up dependencies using the configuration methods
         FavoriteFlightsDataAccessInterface favoritesDAO = appConfig.favoriteFlightsDataAccess();
         FlightDataAccessInterface flightDataAccess = appConfig.flightDataAccess();
