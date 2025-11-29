@@ -54,6 +54,8 @@ import org.lobster.view.MainApplicationFrame;
 import org.lobster.data_access.FlightRadarService;
 
 import javax.swing.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Main {
   
@@ -173,6 +175,15 @@ public class Main {
                     statusChangeController
             );
             frame.setVisible(true);
+
+            Timer timer = new Timer();
+            TimerTask statusChange = new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println("Status changed: BA7274 - DELAYED");
+                }
+            };
+            timer.schedule(statusChange, 3000);
         });
     }
 }
