@@ -99,6 +99,7 @@ public class UpdateMapInteractor implements UpdateMapInputBoundary {
                 "Failed to update map: " + e.getMessage()
             );
             presenter.present(errorData);
+            throw e;
         }
     }
 }
