@@ -1,8 +1,9 @@
-package org.lobster.interface_adapter.search_flight;
+package org.lobster.use_case.search_flight;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.lobster.entity.Flight;
+import org.lobster.interface_adapter.search_flight.SearchFlightPresenter;
 import org.lobster.mocks.MockSearchFlightViewModel;
 import org.lobster.use_case.search_flight.SearchFlightOutputData;
 
