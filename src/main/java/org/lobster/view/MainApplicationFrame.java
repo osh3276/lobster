@@ -157,7 +157,7 @@ public class MainApplicationFrame extends JFrame implements PropertyChangeListen
         resultArea = new JTextArea();
         resultArea.setEditable(false);
         resultArea.setMargin(new Insets(10, 10, 10, 10));
-        resultArea.setText("Enter a flight number and click Search to get started.\n\nTry: AC873, DL123, or BA456");
+        resultArea.setText("Enter a flight number and click Search to get started.");
 
         return new JScrollPane(resultArea);
     }
