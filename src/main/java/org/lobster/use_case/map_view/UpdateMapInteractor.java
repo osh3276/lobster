@@ -55,31 +55,7 @@ public class UpdateMapInteractor implements UpdateMapInputBoundary {
             
             // Fetch flight data for each requested flight
             for (String flightNumber : flightNumbers) {
-                try {
-                    Flight flight = flightDataAccess.findByFlightNumber(flightNumber);
-                    
-                    if (flight != null && flight.getLivePosition() != null) {
-                        LivePosition position = flight.getLivePosition();
-                        
-                        // Only add flights that are within our map bounds
-                        if (mapBounds.contains(position.getLatitude(), position.getLongitude())) {
-                            MapCoordinate screenPos = mapBounds.worldToScreen(
-                                position.getLatitude(), 
-                                position.getLongitude()
-                            );
-                            
-                            MapPlane mapPlane = new MapPlane(
-                                flight.getFlightNumber(),
-                                position,
-                                screenPos
-                            );
-                            
-                            mapPlanes.add(mapPlane);
-                        }
-                    }
-                } catch (Exception e) {
-                    Logger.getInstance().warn(CLASS_NAME, "Failed to get position for flight " + flightNumber, e);
-                }
+                processFlightForMap(flightNumber, mapBounds, mapPlanes);
             }
             
             String message = mapPlanes.isEmpty() 
@@ -100,6 +76,41 @@ public class UpdateMapInteractor implements UpdateMapInputBoundary {
             );
             presenter.present(errorData);
             throw e;
+        }
+    }
+
+    /**
+     * Process a single flight for map display
+     * 
+     * @param flightNumber the flight number to process
+     * @param mapBounds the map bounds for coordinate conversion
+     * @param mapPlanes the list to add valid map planes to
+     */
+    private void processFlightForMap(String flightNumber, MapBounds mapBounds, List<MapPlane> mapPlanes) {
+        try {
+            Flight flight = flightDataAccess.findByFlightNumber(flightNumber);
+            
+            if (flight != null && flight.getLivePosition() != null) {
+                LivePosition position = flight.getLivePosition();
+                
+                // Only add flights that are within our map bounds
+                if (mapBounds.contains(position.getLatitude(), position.getLongitude())) {
+                    MapCoordinate screenPos = mapBounds.worldToScreen(
+                        position.getLatitude(), 
+                        position.getLongitude()
+                    );
+                    
+                    MapPlane mapPlane = new MapPlane(
+                        flight.getFlightNumber(),
+                        position,
+                        screenPos
+                    );
+                    
+                    mapPlanes.add(mapPlane);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getInstance().warn(CLASS_NAME, "Failed to get position for flight " + flightNumber, e);
         }
     }
 }
