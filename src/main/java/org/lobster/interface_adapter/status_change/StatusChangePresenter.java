@@ -13,7 +13,7 @@ public class StatusChangePresenter implements StatusChangeOutputBoundary {
 
     @Override
     public void present(StatusChangeOutputData outputData) {
-        viewModel.setLastUpdatedFlight(outputData.getUpdatdFlight());
+        viewModel.setLastUpdatedFlight(outputData.getUpdatedFlight());
         viewModel.notifyObservers();
     }
 }

@@ -3,13 +3,13 @@ package org.lobster.use_case.status_change;
 import org.lobster.entity.Flight;
 
 public class StatusChangeOutputData {
-    private final Flight updatdFlight;
+    private final Flight updatedFlight;
 
-    public StatusChangeOutputData(Flight updatdFlight) {
-        this.updatdFlight = updatdFlight;
+    public StatusChangeOutputData(Flight updatedFlight) {
+        this.updatedFlight = updatedFlight;
     }
 
-    public Flight getUpdatdFlight() {
-        return updatdFlight;
+    public Flight getUpdatedFlight() {
+        return updatedFlight;
     }
 }

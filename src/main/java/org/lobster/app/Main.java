@@ -25,6 +25,9 @@ import org.lobster.interface_adapter.search_flight.SearchFlightViewModel;
 import org.lobster.interface_adapter.map_view.MapViewController;
 import org.lobster.interface_adapter.map_view.MapViewModel;
 import org.lobster.interface_adapter.map_view.MapViewPresenter;
+import org.lobster.interface_adapter.status_change.StatusChangeController;
+import org.lobster.interface_adapter.status_change.StatusChangePresenter;
+import org.lobster.interface_adapter.status_change.StatusChangeViewModel;
 import org.lobster.use_case.add_to_favorites.AddToFavoritesInputBoundary;
 import org.lobster.use_case.add_to_favorites.AddToFavoritesInteractor;
 import org.lobster.use_case.add_to_favorites.AddToFavoritesOutputBoundary;
@@ -45,11 +48,14 @@ import org.lobster.use_case.search_flight.SearchFlightOutputBoundary;
 import org.lobster.use_case.map_view.UpdateMapInputBoundary;
 import org.lobster.use_case.map_view.UpdateMapInteractor;
 import org.lobster.use_case.map_view.UpdateMapOutputBoundary;
+import org.lobster.use_case.status_change.StatusChangeInteractor;
 import org.lobster.util.Logger;
 import org.lobster.view.MainApplicationFrame;
 import org.lobster.data_access.FlightRadarService;
 
 import javax.swing.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Main {
   
@@ -140,6 +146,12 @@ public class Main {
                 new BrowseAirportInteractor(flightRadarService, browseAirportPresenter);
         BrowseAirportController browseAirportController = new BrowseAirportController(browseAirportInteractor);
 
+        // Status Change use case
+        StatusChangeViewModel statusChangeViewModel = new StatusChangeViewModel();
+        StatusChangePresenter statusChangePresenter = new StatusChangePresenter(statusChangeViewModel);
+        StatusChangeInteractor statusChangeInteractor = new StatusChangeInteractor(favoritesDAO, flightDataAccess, statusChangePresenter);
+        StatusChangeController statusChangeController = new StatusChangeController(statusChangeInteractor);
+
         // Start the application on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
             try {
@@ -159,9 +171,19 @@ public class Main {
                     mapViewController,
                     mapViewModel,
                     browseAirportController,
-                    browseAirportViewModel
+                    browseAirportViewModel,
+                    statusChangeController
             );
             frame.setVisible(true);
+
+            Timer timer = new Timer();
+            TimerTask statusChange = new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println("Status changed: BA7274 - DELAYED");
+                }
+            };
+            timer.schedule(statusChange, 3000);
         });
     }
 }
