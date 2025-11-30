@@ -48,6 +48,7 @@ public class BrowseAirportPanel extends JPanel implements PropertyChangeListener
         airportResultArea = new JTextArea();
         airportResultArea.setEditable(false);
         airportResultArea.setMargin(new Insets(10, 10, 10, 10));
+        airportResultArea.setText("Enter an airport code and click Browse.");
 
         add(inputPanel, BorderLayout.NORTH);
         add(new JScrollPane(airportResultArea), BorderLayout.CENTER);
