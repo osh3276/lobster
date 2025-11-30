@@ -2,7 +2,6 @@ package org.lobster.view;
 
 import org.lobster.interface_adapter.browse_airport.BrowseAirportController;
 import org.lobster.interface_adapter.browse_airport.BrowseAirportViewModel;
-import org.lobster.entity.Airport;
 
 import javax.swing.*;
 import java.awt.*;
