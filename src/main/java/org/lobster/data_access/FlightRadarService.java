@@ -85,8 +85,4 @@ public class FlightRadarService {
         String responseBody = response.body().string();
         return new JSONObject(responseBody);
     }
-
-    public List<Flight> getFlightsByAirport(String airportCode, String type) {
-        return new ArrayList<>();
-    }
 }

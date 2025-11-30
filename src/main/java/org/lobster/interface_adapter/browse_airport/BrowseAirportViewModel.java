@@ -1,44 +1,38 @@
 package org.lobster.interface_adapter.browse_airport;
 
-import org.lobster.entity.Flight;
+import org.lobster.entity.Airport;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.List;
 
 public class BrowseAirportViewModel {
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
-    private List<Flight> flights;
+    private Airport airport;
     private String message;
 
-    public List<Flight> getFlights() {
-        return flights;
+    public Airport getAirport() { return airport; }
+    public String getMessage() { return message; }
+
+    public void setAirport(Airport airport) {
+        this.airport = airport;
+        fireChange();
     }
 
-    public String getMessage(){
-        return message;
-    }
-
-    public void setFlights(List<Flight> flights) {
-        this.flights = flights;
-        firePropertyChanged();
-    }
-
-    public void setMessage(String message){
+    public void setMessage(String message) {
         this.message = message;
-        firePropertyChanged();
+        fireChange();
     }
 
-    public void firePropertyChanged() {
+    private void fireChange() {
         support.firePropertyChange("state", null, null);
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        support.addPropertyChangeListener(listener);
+    public void addPropertyChangeListener(PropertyChangeListener l) {
+        support.addPropertyChangeListener(l);
     }
 
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        support.removePropertyChangeListener(listener);
+    public void removePropertyChangeListener(PropertyChangeListener l) {
+        support.removePropertyChangeListener(l);
     }
 }

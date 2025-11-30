@@ -12,8 +12,7 @@ public class BrowseAirportPresenter implements BrowseAirportOutputBoundary {
 
     @Override
     public void present(BrowseAirportOutputData data) {
-        viewModel.setFlights(data.getFlights());
+        viewModel.setAirport(data.getAirport());
         viewModel.setMessage(data.getMessage());
-        viewModel.firePropertyChanged();
     }
 }
