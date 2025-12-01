@@ -24,6 +24,10 @@ public class StatusChangeInteractor implements StatusChangeInputBoundary{
         for (Flight f : favoritesDAO.findAll()) {
             Flight latest = flightAPI.findByFlightNumber(f.getFlightNumber());
 
+            if (latest.getStatus() == null){
+                return;
+            }
+
             if (!latest.getStatus().equals(f.getStatus())) {
                 favoritesDAO.save(latest);
                 presenter.present(new StatusChangeOutputData(latest));
