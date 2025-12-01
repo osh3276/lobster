@@ -45,9 +45,11 @@
 
 ---
 ## API Reference
+The API used in this project is [FlightRadar24](https://fr24api.flightradar24.com/docs/endpoints/overview#airports-full). 
 
 --- 
 ## Instructions
-
---- 
-## Provided Tests
+- Open application in main.
+- Search for a flight, or airport.
+- If flight is searched, user can add to their favourites. 
+- Once user has a flight or more in their favourites, they can choose to export the data of the flights as a CSV file. 
