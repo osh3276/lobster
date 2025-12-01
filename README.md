@@ -46,7 +46,7 @@
 ---
 ## API Reference
 The API used in this project is [FlightRadar24](https://fr24api.flightradar24.com/docs/endpoints/overview#airports-full). 
-
+The API returns information in JSONObjects, and the application parse this information for our entities used.
 --- 
 ## Instructions
 - Open application in main.
