@@ -1,7 +1,7 @@
 package org.lobster.exception;
 
 /**
- * Exception thrown when favorites operations fail
+ * Exception thrown when favorites operations fail.
  */
 public class FavoritesException extends Exception {
     
