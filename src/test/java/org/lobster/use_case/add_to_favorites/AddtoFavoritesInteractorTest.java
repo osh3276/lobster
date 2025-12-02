@@ -37,7 +37,8 @@ class AddToFavoritesInteractorTest {
         // Assert
         assertFalse(favoritesDAO.saveCalled);
         assertNull(outputBoundary.lastSuccessOutput);
-        assertNull(outputBoundary.lastFailMessage);
+        // Now we expect a fail message to be set
+        assertEquals("Flight number is required", outputBoundary.lastFailMessage);
     }
 
     @Test
@@ -168,5 +169,46 @@ class AddToFavoritesInteractorTest {
         assertNotNull(outputBoundary.lastFailMessage);
         assertTrue(outputBoundary.lastFailMessage.contains("Failed to add favorite"));
         // Note: save was attempted but failed
+    }
+    @Test
+    void execute_WhenFlightNumberHasInvalidFormat_ShouldPrepareFailView() {
+        // Test cases for invalid flight number formats
+        String[] invalidFlightNumbers = {
+                "A123",      // Too short airline code (1 letter)
+                "ABC123",    // Too long airline code (3 letters)
+                "AA",        // Missing numbers
+                "AA12A",     // Letter after numbers
+                "11AA",      // Numbers before letters
+                "AA-123",    // Contains hyphen
+                "AA 123",    // Contains space
+                "",          // Already tested in another test
+                "   ",       // Already tested in another test
+                null         // Already tested in another test
+        };
+
+        for (String invalidFlightNumber : invalidFlightNumbers) {
+            // Reset mocks for each iteration
+            outputBoundary.reset();
+            favoritesDAO.reset();
+
+            // Arrange
+            AddToFavoritesInputData inputData = new AddToFavoritesInputData(invalidFlightNumber);
+
+            // Act
+            interactor.execute(inputData);
+
+            // Assert
+            // Skip null/empty cases since they're handled by other tests
+            if (invalidFlightNumber == null || invalidFlightNumber.trim().isEmpty()) {
+                continue;
+            }
+
+            assertEquals("Invalid flight number format", outputBoundary.lastFailMessage,
+                    "Failed for flight number: '" + invalidFlightNumber + "'");
+            assertFalse(favoritesDAO.saveCalled,
+                    "Should not call save for invalid flight number: '" + invalidFlightNumber + "'");
+            assertNull(outputBoundary.lastSuccessOutput,
+                    "Should not have success output for invalid flight number: '" + invalidFlightNumber + "'");
+        }
     }
 }
