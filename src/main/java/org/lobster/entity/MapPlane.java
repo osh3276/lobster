@@ -1,13 +1,14 @@
 package org.lobster.entity;
 
 /**
- * Represents a plane on the map with its position and visual properties
+ * Represents a plane on the map with its position and visual properties.
  */
 public class MapPlane {
     private final String flightNumber;
     private final LivePosition position;
     private final MapCoordinate screenPosition;
-    private final double heading; // in degrees
+    // in degrees
+    private final double heading;
 
     public MapPlane(String flightNumber, LivePosition position, MapCoordinate screenPosition) {
         this.flightNumber = flightNumber;

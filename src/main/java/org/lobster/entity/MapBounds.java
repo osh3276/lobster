@@ -1,7 +1,7 @@
 package org.lobster.entity;
 
 /**
- * Represents the bounds and projection parameters for a map view
+ * Represents the bounds and projection parameters for a map view.
  */
 public class MapBounds {
     private final double minLatitude;
@@ -23,7 +23,7 @@ public class MapBounds {
     }
 
     /**
-     * Convert world coordinates (latitude/longitude) to screen coordinates using Mercator projection
+     * Convert world coordinates (latitude/longitude) to screen coordinates using Mercator projection.
      */
     public MapCoordinate worldToScreen(double latitude, double longitude) {
         // Mercator projection
@@ -31,21 +31,21 @@ public class MapBounds {
         
         // Convert latitude to Mercator Y coordinate
         double latRad = Math.toRadians(latitude);
-        double mercatorY = Math.log(Math.tan(Math.PI/4 + latRad/2));
+        double mercatorY = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
         
         // Convert Mercator bounds to screen coordinates
         double minLatRad = Math.toRadians(minLatitude);
         double maxLatRad = Math.toRadians(maxLatitude);
-        double minMercatorY = Math.log(Math.tan(Math.PI/4 + minLatRad/2));
-        double maxMercatorY = Math.log(Math.tan(Math.PI/4 + maxLatRad/2));
+        double minMercatorY = Math.log(Math.tan(Math.PI / 4 + minLatRad / 2));
+        double maxMercatorY = Math.log(Math.tan(Math.PI / 4 + maxLatRad / 2));
         
         double y = mapHeight - ((mercatorY - minMercatorY) / (maxMercatorY - minMercatorY) * mapHeight);
         
-        return new MapCoordinate((int)x, (int)y);
+        return new MapCoordinate((int) x, (int) y);
     }
 
     /**
-     * Check if the given coordinates are within the map bounds
+     * Check if the given coordinates are within the map bounds.
      */
     public boolean contains(double latitude, double longitude) {
         return latitude >= minLatitude && latitude <= maxLatitude &&
@@ -53,12 +53,29 @@ public class MapBounds {
     }
 
     // Getters
-    public double getMinLatitude() { return minLatitude; }
-    public double getMaxLatitude() { return maxLatitude; }
-    public double getMinLongitude() { return minLongitude; }
-    public double getMaxLongitude() { return maxLongitude; }
-    public int getMapWidth() { return mapWidth; }
-    public int getMapHeight() { return mapHeight; }
+    public double getMinLatitude() {
+        return minLatitude;
+    }
+
+    public double getMaxLatitude() {
+        return maxLatitude;
+    }
+
+    public double getMinLongitude() {
+        return minLongitude;
+    }
+
+    public double getMaxLongitude() {
+        return maxLongitude;
+    }
+
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public int getMapHeight() {
+        return mapHeight;
+    }
 
     @Override
     public String toString() {

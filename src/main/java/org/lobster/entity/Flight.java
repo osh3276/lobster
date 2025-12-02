@@ -1,3 +1,4 @@
+
 package org.lobster.entity;
 
 import java.util.Date;
@@ -14,8 +15,11 @@ public class Flight {
     private final LivePosition livePosition;
 
     // Updated constructor
-    public Flight(String hex, String flightNumber, String callsign, Airline airline, Airport departure, Airport arrival, Date eta,
-                  FlightStatus status, LivePosition livePosition) {
+    public Flight(String hex, String flightNumber,
+                  String callsign, Airline airline,
+                  Airport departure, Airport arrival,
+                  Date eta, FlightStatus status,
+                  LivePosition livePosition) {
         this.hex = hex;
         this.airline = airline;
         this.flightNumber = flightNumber;
@@ -33,15 +37,41 @@ public class Flight {
     }
 
     // Getters
-    public String getCallsign() { return callsign; }
-    public Airline getAirline() { return airline; }
-    public Airport getDeparture() { return departure; }
-    public Airport getArrival() { return arrival; }
-    public FlightStatus getStatus() { return status; }
-    public String getHex() { return hex; }
-    public String getFlightNumber() { return flightNumber; }
-    public Date getEta() { return eta; }
-    public LivePosition getLivePosition() { return livePosition; }
+    public String getCallsign() {
+        return callsign;
+    }
+
+    public Airline getAirline() {
+        return airline;
+    }
+
+    public Airport getDeparture() {
+        return departure;
+    }
+
+    public Airport getArrival() {
+        return arrival;
+    }
+
+    public FlightStatus getStatus() {
+        return status;
+    }
+
+    public String getHex() {
+        return hex;
+    }
+
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+
+    public Date getEta() {
+        return eta;
+    }
+
+    public LivePosition getLivePosition() {
+        return livePosition;
+    }
 
     @Override
     public String toString() {
@@ -82,7 +112,8 @@ public class Flight {
                     livePosition.getGroundSpeed(),
                     livePosition.getTrack()
             ));
-        } else {
+        }
+        else {
             sb.append("Position: N/A");
         }
 

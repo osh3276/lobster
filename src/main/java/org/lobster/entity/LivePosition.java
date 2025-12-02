@@ -3,9 +3,12 @@ package org.lobster.entity;
 public class LivePosition {
     private final double latitude;
     private final double longitude;
-    private final int altitude; // in feet
-    private final double groundSpeed; // in knots
-    private final double track; // heading, in degrees
+    // in feet
+    private final int altitude;
+    // in knots
+    private final double groundSpeed;
+    // heading, in degrees
+    private final double track;
 
     public LivePosition(double latitude, double longitude, int altitude,
                         double gspeed, double track) {
@@ -22,9 +25,23 @@ public class LivePosition {
     }
 
     // Getters
-    public double getLatitude() { return latitude; }
-    public double getLongitude() { return longitude; }
-    public int getAltitude() { return altitude; }
-    public double getGroundSpeed() { return groundSpeed; }
-    public double getTrack() { return track; }
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public int getAltitude() {
+        return altitude;
+    }
+
+    public double getGroundSpeed() {
+        return groundSpeed;
+    }
+
+    public double getTrack() {
+        return track;
+    }
 }

@@ -1,8 +1,8 @@
 package org.lobster.app;
 
 import org.lobster.data_access.FlightRadarDataAccess;
-import org.lobster.data_access.InMemoryFavoriteFlightsDAO;
-//Interface Adapters
+
+// Interface Adapters
 import org.lobster.data_access.JsonFileFavoriteFlightsDAO;
 import org.lobster.interface_adapter.FavoritesViewModel;
 import org.lobster.interface_adapter.FavoriteFlightsDataAccessInterface;
@@ -51,12 +51,18 @@ import org.lobster.data_access.FlightRadarService;
 
 import javax.swing.*;
 
+/**
+ * This class is where the main UI application works.
+ */
 public class Main {
-  
+
     private static final String CLASS_NAME = "Main";
     private static boolean debugMode = false;
 
     // Configuration methods - ADD THESE METHODS TO YOUR MAIN CLASS
+    /**
+     * This class is where the main UI application works.
+     */
     public FlightDataAccessInterface flightDataAccess() {
         return new FlightRadarDataAccess();
     }

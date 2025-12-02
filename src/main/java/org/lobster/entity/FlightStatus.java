@@ -1,3 +1,4 @@
+
 package org.lobster.entity;
 
 public enum FlightStatus {
@@ -17,6 +18,11 @@ public enum FlightStatus {
         this.shortDescription = shortDescription;
     }
 
-    public String getColorCode() { return colorCode; }
-    public String getDisplayName() { return displayName; }
+    public String getColorCode() {
+        return colorCode;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
 }
