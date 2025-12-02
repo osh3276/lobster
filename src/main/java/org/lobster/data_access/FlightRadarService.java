@@ -15,7 +15,7 @@ public class FlightRadarService {
 
     private static final String CLASS_NAME = "FlightRadar24";
     private final OkHttpClient httpClient;
-    private static final String API_TOKEN = System.getenv("API_TOKEN");
+    private static final String API_TOKEN = System.getenv("019a6fc2-d902-73bb-9381-01ef85bc1fff|tIAewWCKTTGTLIEZAdYQ4xhfOLWgHeYjWN0wt6VI93fcb508");
 
     public FlightRadarService() {
         this.httpClient = new OkHttpClient();
@@ -77,7 +77,7 @@ public class FlightRadarService {
                 .url(url)
                 .addHeader("Accept", "application/json")
                 .addHeader("Accept-Version", "v1")
-                .addHeader("Authorization", "Bearer " + API_TOKEN)
+                .addHeader("Authorization", "Bearer " + "019a6fc2-d902-73bb-9381-01ef85bc1fff|tIAewWCKTTGTLIEZAdYQ4xhfOLWgHeYjWN0wt6VI93fcb508")
                 .build();
 
         Response response = httpClient.newCall(request).execute();
