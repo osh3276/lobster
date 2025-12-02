@@ -1,15 +1,16 @@
-package org.lobster.interface_adapter.map_view;
 
-import org.lobster.entity.MapBounds;
-import org.lobster.entity.MapPlane;
+package org.lobster.interface_adapter.map_view;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lobster.entity.MapBounds;
+import org.lobster.entity.MapPlane;
+
 /**
- * View model for the map view component
+ * View model for the map view component.
  */
 public class MapViewModel {
     
@@ -27,18 +28,22 @@ public class MapViewModel {
         }
 
         public List<MapPlane> getPlanes() {
+
             return new ArrayList<>(planes);
         }
 
         public MapBounds getMapBounds() {
+
             return mapBounds;
         }
 
         public boolean isSuccess() {
+
             return success;
         }
 
         public String getMessage() {
+
             return message;
         }
     }
@@ -58,22 +63,27 @@ public class MapViewModel {
     }
 
     public MapState getState() {
+
         return state;
     }
 
     public List<MapPlane> getPlanes() {
+
         return state.getPlanes();
     }
 
     public MapBounds getMapBounds() {
+
         return state.getMapBounds();
     }
 
     public String getMessage() {
+
         return state.getMessage();
     }
 
     public boolean isSuccess() {
+
         return state.isSuccess();
     }
 

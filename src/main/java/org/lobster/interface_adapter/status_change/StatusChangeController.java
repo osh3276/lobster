@@ -9,6 +9,10 @@ public class StatusChangeController {
         this.interactor = interactor;
     }
 
+    /**
+     * Executes the Status Change use case by requesting a poll for updated flight statuses.
+     *
+     */
     public void poll() {
         interactor.execute(new StatusChangeInputData());
     }

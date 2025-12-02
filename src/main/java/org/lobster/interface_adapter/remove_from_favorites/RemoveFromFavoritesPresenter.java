@@ -1,9 +1,13 @@
+
 package org.lobster.interface_adapter.remove_from_favorites;
 
 import org.lobster.interface_adapter.FavoritesViewModel;
 import org.lobster.use_case.remove_from_favorites.RemoveFromFavoritesOutputBoundary;
 import org.lobster.use_case.remove_from_favorites.RemoveFromFavoritesOutputData;
 
+/**
+ * Presenter for the Remove from Favourites use case.
+ */
 public class RemoveFromFavoritesPresenter implements RemoveFromFavoritesOutputBoundary {
     private final FavoritesViewModel viewModel;
 
@@ -28,7 +32,7 @@ public class RemoveFromFavoritesPresenter implements RemoveFromFavoritesOutputBo
                 false,
                 errorMessage,
                 null,
-                viewModel.getState().allFavorites // Keep existing favorites
+                viewModel.getState().allFavorites
         );
         viewModel.setState(state);
     }

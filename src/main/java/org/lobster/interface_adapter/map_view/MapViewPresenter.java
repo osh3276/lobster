@@ -4,7 +4,7 @@ import org.lobster.use_case.map_view.UpdateMapOutputBoundary;
 import org.lobster.use_case.map_view.UpdateMapOutputData;
 
 /**
- * Presenter for map view operations
+ * Presenter for map view operations.
  */
 public class MapViewPresenter implements UpdateMapOutputBoundary {
     

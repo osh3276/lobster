@@ -8,11 +8,12 @@ public class SearchFlightPresenter implements SearchFlightOutputBoundary {
     private final SearchFlightViewModel viewModel;
 
     public SearchFlightPresenter(SearchFlightViewModel viewModel) {
+
         this.viewModel = viewModel;
     }
 
     @Override
-    public void present(SearchFlightOutputData data){
+    public void present(SearchFlightOutputData data) {
         viewModel.setFlight(data.getFlight());
         viewModel.setMessage(data.getMessage());
     }

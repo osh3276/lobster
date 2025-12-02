@@ -1,9 +1,13 @@
+
 package org.lobster.interface_adapter.get_favorites;
 
+import org.lobster.interface_adapter.FavoritesViewModel;
 import org.lobster.use_case.get_favorites.GetFavoritesOutputBoundary;
 import org.lobster.use_case.get_favorites.GetFavoritesOutputData;
-import org.lobster.interface_adapter.FavoritesViewModel;
 
+/**
+ * Presenter for the Get Favourites use case.
+ */
 public class GetFavoritesPresenter implements GetFavoritesOutputBoundary {
     private final FavoritesViewModel viewModel;
 
@@ -28,7 +32,7 @@ public class GetFavoritesPresenter implements GetFavoritesOutputBoundary {
                 false,
                 errorMessage,
                 null,
-                viewModel.getState().allFavorites // Keep existing favorites
+                viewModel.getState().allFavorites
         );
         viewModel.setState(state);
     }
