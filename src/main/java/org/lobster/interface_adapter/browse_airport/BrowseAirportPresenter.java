@@ -1,3 +1,4 @@
+
 package org.lobster.interface_adapter.browse_airport;
 
 import org.lobster.use_case.browse_airport.BrowseAirportOutputBoundary;
