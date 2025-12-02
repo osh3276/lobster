@@ -1,9 +1,9 @@
 package org.lobster.interface_adapter.export_flights;
 
+import javax.swing.JOptionPane;
+
 import org.lobster.use_case.export_flights.ExportFlightsOutputBoundary;
 import org.lobster.use_case.export_flights.ExportFlightsOutputData;
-
-import javax.swing.JOptionPane;
 
 public class ExportFlightsPresenter implements ExportFlightsOutputBoundary {
 
@@ -12,9 +12,9 @@ public class ExportFlightsPresenter implements ExportFlightsOutputBoundary {
 
     @Override
     public void prepareSuccessView(ExportFlightsOutputData outputData) {
-        String message = outputData.getMessage() + "\n" +
-                "File: " + outputData.getFileName() + "\n" +
-                "Location: " + outputData.getFilePath();
+        String message = outputData.getMessage() + "\n"
+                + "File: " + outputData.getFileName() + "\n"
+                + "Location: " + outputData.getFilePath();
         JOptionPane.showMessageDialog(
                 null,
                 message,
