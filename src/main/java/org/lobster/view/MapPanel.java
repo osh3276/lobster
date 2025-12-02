@@ -26,7 +26,7 @@ public class MapPanel extends JPanel implements PropertyChangeListener {
     private final transient MapViewController controller;
     private final transient MapViewModel viewModel;
     private transient BufferedImage worldMapImage;
-    
+
     private static final int DEFAULT_WIDTH = 800;
     private static final int DEFAULT_HEIGHT = 400;
     private static final Color BACKGROUND_COLOR = new Color(173, 216, 230); // Light blue
@@ -34,6 +34,7 @@ public class MapPanel extends JPanel implements PropertyChangeListener {
     private static final Color PLANE_COLOR = Color.RED;
     private static final Color PLANE_LABEL_COLOR = Color.BLACK;
     
+    @SuppressWarnings("checkstyle:RegexpSingleline")
     public MapPanel(MapViewController controller, MapViewModel viewModel) {
         this.controller = controller;
         this.viewModel = viewModel;
@@ -43,8 +44,8 @@ public class MapPanel extends JPanel implements PropertyChangeListener {
 
         // Listen for view model changes
         viewModel.addPropertyChangeListener(this);
-        
-        // Load world map image
+
+        /* Load world map image */
         loadWorldMapImage();
         
         // Initialize the map
@@ -148,7 +149,7 @@ public class MapPanel extends JPanel implements PropertyChangeListener {
             }
         }
         
-        // Draw equator more prominently
+        // Draw the equator more prominently
         double equatorMercatorY = Math.log(Math.tan(Math.PI/4));
         double minLatRad = Math.toRadians(-85);
         double maxLatRad = Math.toRadians(85);

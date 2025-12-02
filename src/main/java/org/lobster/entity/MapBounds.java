@@ -53,12 +53,24 @@ public class MapBounds {
     }
 
     // Getters
-    public double getMinLatitude() { return minLatitude; }
-    public double getMaxLatitude() { return maxLatitude; }
-    public double getMinLongitude() { return minLongitude; }
-    public double getMaxLongitude() { return maxLongitude; }
-    public int getMapWidth() { return mapWidth; }
-    public int getMapHeight() { return mapHeight; }
+    public double getMinLatitude() {
+        return minLatitude;
+    }
+    public double getMaxLatitude() {
+        return maxLatitude;
+    }
+    public double getMinLongitude() {
+        return minLongitude;
+    }
+    public double getMaxLongitude() {
+        return maxLongitude;
+    }
+    public int getMapWidth() {
+        return mapWidth;
+    }
+    public int getMapHeight() {
+        return mapHeight;
+    }
 
     @Override
     public String toString() {
