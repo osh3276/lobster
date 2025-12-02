@@ -16,32 +16,40 @@ public class UpdateMapInteractor implements UpdateMapInputBoundary {
     private static final String CLASS_NAME = "UpdateMapInteractor";
     private final FlightDataAccessInterface flightDataAccess;
     private final UpdateMapOutputBoundary presenter;
-    
     // Mercator projection bounds (85°S to 85°N, full longitude range)
     private static final double DEFAULT_MIN_LAT = -85.0;
     private static final double DEFAULT_MAX_LAT = 85.0;
     private static final double DEFAULT_MIN_LON = -180.0;
     private static final double DEFAULT_MAX_LON = 180.0;
-
-    public UpdateMapInteractor(FlightDataAccessInterface flightDataAccess, 
+    /**
+     * Constructs a new UpdateMapInteractor.
+     *
+     * @param flightDataAccess the data access interface used to retrieve
+     *                         flight information
+     * @param presenter        the output boundary that presents map update data
+     */
+    public UpdateMapInteractor(FlightDataAccessInterface flightDataAccess,
                               UpdateMapOutputBoundary presenter) {
         this.flightDataAccess = flightDataAccess;
         this.presenter = presenter;
     }
-
+    /**
+     * Executes the Update Map use case.
+     *
+     * @param inputData the input data containing selected flight numbers and
+     *                  map dimensions
+     */
     @Override
     public void execute(UpdateMapInputData inputData) {
         try {
             List<MapPlane> mapPlanes = new ArrayList<>();
             List<String> flightNumbers = inputData.getFlightNumbers();
-            
             // Create map bounds
             MapBounds mapBounds = new MapBounds(
                 DEFAULT_MIN_LAT, DEFAULT_MAX_LAT,
                 DEFAULT_MIN_LON, DEFAULT_MAX_LON,
                 inputData.getMapWidth(), inputData.getMapHeight()
             );
-            
             // If no specific flights requested, try to get all available flights
             if (flightNumbers == null || flightNumbers.isEmpty()) {
                 // For now, we'll return empty since we don't have a "get all flights" method implemented
@@ -78,7 +86,6 @@ public class UpdateMapInteractor implements UpdateMapInputBoundary {
             throw e;
         }
     }
-
     /**
      * Process a single flight for map display
      * 
@@ -105,12 +112,13 @@ public class UpdateMapInteractor implements UpdateMapInputBoundary {
                         position,
                         screenPos
                     );
-                    
                     mapPlanes.add(mapPlane);
                 }
             }
         } catch (Exception e) {
-            Logger.getInstance().warn(CLASS_NAME, "Failed to get position for flight " + flightNumber, e);
+            Logger.getInstance().warn(CLASS_NAME,
+                    "Failed to get position for flight " + flightNumber,
+                    e);
         }
     }
 }
