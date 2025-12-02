@@ -1,8 +1,9 @@
+
 package org.lobster.interface_adapter.add_to_favorites;
 
+import org.lobster.interface_adapter.FavoritesViewModel;
 import org.lobster.use_case.add_to_favorites.AddToFavoritesOutputBoundary;
 import org.lobster.use_case.add_to_favorites.AddToFavoritesOutputData;
-import org.lobster.interface_adapter.FavoritesViewModel;
 import org.lobster.util.Logger;
 
 public class AddToFavoritesPresenter implements AddToFavoritesOutputBoundary {
@@ -23,7 +24,8 @@ public class AddToFavoritesPresenter implements AddToFavoritesOutputBoundary {
                 outputData.getFlight(),
                 outputData.getUpdatedFavorites()
         );
-        System.out.println("DEBUG: Presenter - setting new state with " + outputData.getUpdatedFavorites().size() + " favorites");
+        System.out.println("DEBUG: Presenter - setting new state with "
+                + outputData.getUpdatedFavorites().size() + " favorites");
         viewModel.setState(state);
         System.out.println("DEBUG: Presenter - state set successfully");
     }
@@ -35,7 +37,7 @@ public class AddToFavoritesPresenter implements AddToFavoritesOutputBoundary {
                 false,
                 errorMessage,
                 null,
-                viewModel.getState().allFavorites // Keep existing favorites
+                viewModel.getState().allFavorites
         );
         viewModel.setState(state);
     }
