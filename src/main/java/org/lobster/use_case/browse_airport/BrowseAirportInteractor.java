@@ -1,6 +1,5 @@
 package org.lobster.use_case.browse_airport;
 
-import org.json.JSONObject;
 import org.lobster.data_access.FlightRadarService;
 import org.lobster.entity.Airport;
 
@@ -37,33 +36,33 @@ public class BrowseAirportInteractor implements BrowseAirportInputBoundary {
      */
     @Override
     public void execute(BrowseAirportInputData inputData) {
-
         String code = inputData.getAirportCode();
 
-        if (code == null || code.isEmpty()) {
-            presenter.present(new BrowseAirportOutputData(
-                    null,
-                    "Please enter an airport code."
-            ));
+        if (code == null || code.trim().isEmpty()) {
+            presenter.present(new BrowseAirportOutputData(null, "Please enter an airport code."));
             return;
         }
 
-        var json = flightService.getAirport(code);
+        try {
+            String normalized = code.trim().toUpperCase();
 
-        if (json == null) {
-            presenter.present(new BrowseAirportOutputData(
-                    null,
-                    "No information found for: " + code
-            ));
-            return;
+            var json = flightService.getAirport(normalized);
+
+            if (json == null) {
+                presenter.present(new BrowseAirportOutputData(null, "No information found for: " + normalized));
+                return;
+            }
+
+            Airport airport = new Airport(
+                    json.optString("iata", ""),
+                    json.optString("icao", ""),
+                    json.optString("name", "Unknown airport")
+            );
+
+            presenter.present(new BrowseAirportOutputData(airport, ""));
+
+        } catch (Exception e) {
+            presenter.present(new BrowseAirportOutputData(null, "No information found for: " + code.toUpperCase()));
         }
-
-        Airport airport = new Airport(
-                json.optString("iata", ""),
-                json.optString("icao", ""),
-                json.optString("name", "Unknown airport")
-        );
-
-        presenter.present(new BrowseAirportOutputData(airport, ""));
     }
 }
