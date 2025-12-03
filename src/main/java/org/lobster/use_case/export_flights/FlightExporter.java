@@ -11,11 +11,22 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Utility responsible for exporting flight data to CSV format.
+ */
 public class FlightExporter {
-
+    /** Date format used for ETA fields. */
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    public static void exportFlightsToCSV(List<Flight> flights, String filePath) throws IOException {
+    /**
+     * Exports a list of flights to a CSV file at the specified path.
+     *
+     * @param flights the list of flights to export
+     * @param filePath the path to the CSV file to write
+     * @throws IOException if the file cannot be created or written to
+     */
+    public static void exportFlightsToCSV(List<Flight> flights,
+                                          String filePath)
+            throws IOException {
         try (FileWriter writer = new FileWriter(filePath)) {
             writeCSVHeader(writer);
             for (Flight flight : flights) {
@@ -23,7 +34,12 @@ public class FlightExporter {
             }
         }
     }
-
+    /**
+     * Writes the header row for the exported CSV file.
+     *
+     * @param writer the file writer to write to
+     * @throws IOException if writing fails
+     */
     private static void writeCSVHeader(FileWriter writer) throws IOException {
         writer.append("Flight Number,Callsign,Airline IATA,Airline ICAO,Airline Name,")
               .append("Departure IATA,Departure ICAO,Departure Name,")
@@ -32,7 +48,13 @@ public class FlightExporter {
               .append("Latitude,Longitude,Altitude (ft),Ground Speed (kt),Heading (deg),")
               .append("Hex\n");
     }
-
+    /**
+     * Writes a single flight record as a CSV row.
+     *
+     * @param writer the writer used to append CSV content
+     * @param flight the flight to write
+     * @throws IOException if writing fails
+     */
     private static void writeFlightToCSV(FileWriter writer, Flight flight) throws IOException {
         writer.append(escapeCSV(flight.getFlightNumber())).append(",")
               .append(escapeCSV(flight.getCallsign())).append(",");
@@ -90,7 +112,12 @@ public class FlightExporter {
 
         writer.append(escapeCSV(flight.getHex())).append("\n");
     }
-
+    /**
+     * Escapes CSV fields containing commas, quotes, or line breaks.
+     *
+     * @param value the string value to escape
+     * @return the escaped string safe for inclusion in a CSV file
+     */
     private static String escapeCSV(String value) {
         if (value == null) {
             return "";
@@ -101,4 +128,3 @@ public class FlightExporter {
         return value;
     }
 }
-

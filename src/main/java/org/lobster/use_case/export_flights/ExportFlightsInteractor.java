@@ -13,14 +13,34 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
+/**
+ * Interactor for the Export Flights use case.
+ */
 public class ExportFlightsInteractor implements ExportFlightsInputBoundary {
     private final ExportFlightsOutputBoundary outputBoundary;
-
+    /**
+     * Constructs a new {@code ExportFlightsInteractor}.
+     *
+     * @param outputBoundary the output boundary responsible for formatting
+     *                       and presenting the result of the export operation
+     */
     public ExportFlightsInteractor(ExportFlightsOutputBoundary outputBoundary) {
         this.outputBoundary = outputBoundary;
     }
-
+    /**
+     * Executes the Export Flights use case.
+     *
+     * <p>The method performs the following steps:
+     * <ol>
+     *   <li>Validates that the user selected flights to export.</li>
+     *   <li>Validates that the export format is supported.</li>
+     *   <li>Generates an appropriate filename and determines the export path.</li>
+     *   <li>Writes the selected flights to the chosen file format.</li>
+     *   <li>Returns success or failure to the presenter.</li>
+     * </ol>
+     *
+     * @param inputData the input data containing the flights, format, and flags
+     */
     @Override
     public void execute(ExportFlightsInputData inputData) {
         List<Flight> flights = inputData.getFlights();
@@ -43,7 +63,7 @@ public class ExportFlightsInteractor implements ExportFlightsInputBoundary {
 
             exportToCSV(flights, filePath);
 
-            String message = String.format("Successfully exported %d flight(s) to %s", 
+            String message = String.format("Successfully exported %d flight(s) to %s",
                     flights.size(), fileName);
             ExportFlightsOutputData outputData = new ExportFlightsOutputData(
                     true,
@@ -56,7 +76,13 @@ public class ExportFlightsInteractor implements ExportFlightsInputBoundary {
             outputBoundary.prepareFailView("Failed to export flights: " + e.getMessage());
         }
     }
-
+    /**
+     * Writes the given flights to a CSV file at the specified path.
+     *
+     * @param flights  the flights to export
+     * @param filePath the file path to write to
+     * @throws IOException if writing fails
+     */
     private void exportToCSV(List<Flight> flights, Path filePath) throws IOException {
         try (FileWriter writer = new FileWriter(filePath.toFile())) {
             writeCSVHeader(writer);
@@ -65,7 +91,12 @@ public class ExportFlightsInteractor implements ExportFlightsInputBoundary {
             }
         }
     }
-
+    /**
+     * Writes the CSV header row.
+     *
+     * @param writer the CSV writer
+     * @throws IOException if writing fails
+     */
     private void writeCSVHeader(FileWriter writer) throws IOException {
         writer.append("Flight Number,Callsign,Airline IATA,Airline ICAO,Airline Name,")
               .append("Departure IATA,Departure ICAO,Departure Name,")
@@ -74,10 +105,16 @@ public class ExportFlightsInteractor implements ExportFlightsInputBoundary {
               .append("Latitude,Longitude,Altitude (ft),Ground Speed (kt),Heading (deg),")
               .append("Hex\n");
     }
-
+    /**
+     * Writes a single flight record to the CSV output.
+     *
+     * @param writer the CSV writer
+     * @param flight the flight to write
+     * @throws IOException if writing fails
+     */
     private void writeFlightToCSV(FileWriter writer, Flight flight) throws IOException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        
+
         writer.append(escapeCSV(flight.getFlightNumber())).append(",")
               .append(escapeCSV(flight.getCallsign())).append(",");
 
@@ -134,7 +171,13 @@ public class ExportFlightsInteractor implements ExportFlightsInputBoundary {
 
         writer.append(escapeCSV(flight.getHex())).append("\n");
     }
-
+    /**
+     * Escapes values that contain commas, quotes, or line breaks
+     * for safe CSV use.
+     *
+     * @param value the raw string value
+     * @return the escaped value
+     */
     private String escapeCSV(String value) {
         if (value == null) {
             return "";
@@ -144,21 +187,29 @@ public class ExportFlightsInteractor implements ExportFlightsInputBoundary {
         }
         return value;
     }
-
+    /**
+     * Generates a timestamped CSV filename.
+     *
+     * @return a unique filename for the export
+     */
     private String generateFileName() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
         return "flights_export_" + dateFormat.format(new Date()) + ".csv";
     }
-
+    /**
+     * Determines a valid download directory (prefers ~/Downloads).
+     *
+     * @return a path where files can be safely saved
+     * @throws IOException if filesystem access fails
+     */
     private Path getDownloadPath() throws IOException {
         String userHome = System.getProperty("user.home");
         Path downloadPath = Paths.get(userHome, "Downloads");
-        
+
         if (!Files.exists(downloadPath)) {
             downloadPath = Paths.get(userHome);
         }
-        
+
         return downloadPath;
     }
 }
-
